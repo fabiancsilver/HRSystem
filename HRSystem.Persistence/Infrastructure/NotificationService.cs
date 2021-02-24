@@ -29,6 +29,7 @@ namespace HRSystem.Persistence.Infrastructure
 
             foreach (var notification in notifications)
             {
+                var uniqueName = Guid.NewGuid().ToString();
 
                 using (StreamWriter outputFile = new StreamWriter(Path.Combine(pathToSave, $"{uniqueName}.txt")))
                 {
