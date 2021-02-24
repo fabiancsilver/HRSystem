@@ -11,21 +11,14 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class EmailTypeRepository : IEmailTypeRepository
+    public class EmailTypeRepository : BaseRepository<EmailType>, IEmailTypeRepository
     {
-        protected readonly HRContext _context;
-
-        public EmailTypeRepository(HRContext context)
+        public EmailTypeRepository(HRContext context) : base(context)
         {
-            _context = context;
+            
         }
 
-        public void Create(EmailType entity)
-        {
-            _context.EmailTypes.Add(entity);
-        }
-
-        public async Task<IEnumerable<EmailType>> GetAll(QueryParameters queryParameters)
+        public override async Task<IEnumerable<EmailType>> GetAll(QueryParameters queryParameters)
         {
 
             Dictionary<string, string> dictionarySort = new Dictionary<string, string>() {
@@ -37,38 +30,13 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "Name", "Name" }
             };
 
-            var list = _context.EmailTypes
+            var list = _dbContext.EmailTypes
                                .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
                                .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
                                .AsQueryable();
 
 
             return await list.ToListAsync();
-        }
-
-        public async Task<EmailType> GetById(int id)
-        {
-            return await _context.EmailTypes.FindAsync(id);
-        }
-
-        public async Task Remove(int id)
-        {
-            var item = await _context.EmailTypes.FindAsync(id);
-            if (item == null)
-            {
-                throw new ArgumentException();
-            }
-            _context.Remove(item);
-        }
-
-        public async Task<int> SaveChanges()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
-        public void Update(int id, EmailType entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
         }
     }
 }

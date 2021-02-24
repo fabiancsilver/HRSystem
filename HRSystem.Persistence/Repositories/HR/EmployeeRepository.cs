@@ -11,22 +11,14 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
     {
-
-        protected readonly HRContext _context;
-
-        public EmployeeRepository(HRContext context)
+        public EmployeeRepository(HRContext context) : base(context)
         {
-            _context = context;
-        }
+            
+        }       
 
-        public void Create(Employee entity)
-        {
-            _context.Employees.Add(entity);
-        }
-
-        public async Task<IEnumerable<Employee>> GetAll(QueryParameters queryParameters)
+        public override async Task<IEnumerable<Employee>> GetAll(QueryParameters queryParameters)
         {
             Dictionary<string, string> dictionarySort = new Dictionary<string, string>() {
                 { "Name", "Name" },
@@ -51,7 +43,7 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "Status", "Status.Name" }
             };
 
-            return await _context.Employees
+            return await _dbContext.Employees
                                  .Include(x => x.Position)
                                  .Include(x => x.Department)
                                  .Include(x => x.Shift)
@@ -64,34 +56,11 @@ namespace HRSystem.Persistence.Repositories.HR
                                  .ToListAsync();
         }
 
-        public async Task<Employee> GetById(int id)
-        {
-            return await _context.Employees.FindAsync(id);
-        }
-
-        public async Task Remove(int id)
-        {
-            var item = await _context.Employees.FindAsync(id);
-            if (item == null)
-            {
-                throw new ArgumentException();
-            }
-            _context.Remove(item);
-        }
-
-        public async Task<int> SaveChanges()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
-        public void Update(int id, Employee entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-        }
+        
 
         public async Task UpdatePhoto(int employeeID, string pathPhoto)
         {
-            var employee = await _context.Employees
+            var employee = await _dbContext.Employees
                                          .FindAsync(employeeID);
 
             if (employee == null)

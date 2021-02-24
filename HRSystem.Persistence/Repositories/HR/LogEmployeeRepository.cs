@@ -8,25 +8,13 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class LogEmployeeRepository : ILogEmployeeRepository
-    {
+    public class LogEmployeeRepository : BaseRepository<LogEmployee>, ILogEmployeeRepository
+    {   
 
-        protected readonly HRContext _context;
-
-        public LogEmployeeRepository(HRContext context)
+        public LogEmployeeRepository(HRContext context) : base(context)
         {
-            _context = context;
-        }
-
-        public void Create(LogEmployee entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> SaveChanges()
-        {
-            return await _context.SaveChangesAsync();
-        }      
+            
+        }          
 
         public async Task<int> Log(Employee employee)
         {
@@ -45,30 +33,8 @@ namespace HRSystem.Persistence.Repositories.HR
             logEmployee.FavoriteColorID = employee.FavoriteColorID;
             logEmployee.PreferredPhoneID = employee.PreferredPhoneID;
 
-            _context.LogEmployees.Add(logEmployee);
-            return await _context.SaveChangesAsync();
-        }
-
-        public Task Remove(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<LogEmployee>> GetAll(QueryParameters queryParameters)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<LogEmployee> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(int id, LogEmployee entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        
+            _dbContext.LogEmployees.Add(logEmployee);
+            return await _dbContext.SaveChangesAsync();
+        }        
     }
 }

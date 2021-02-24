@@ -2,7 +2,7 @@
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IShiftRepository : IBaseRepository<Shift>
+    public interface IShiftRepository : IAsyncRepository<Shift>
     {
     }
 }

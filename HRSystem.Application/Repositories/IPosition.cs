@@ -2,7 +2,7 @@
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IPositionRepository : IBaseRepository<Position>
+    public interface IPositionRepository : IAsyncRepository<Position>
     {
     }
 }

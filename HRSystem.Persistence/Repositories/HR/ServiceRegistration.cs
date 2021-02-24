@@ -13,6 +13,7 @@ namespace HRSystem.Persistence.Repositories.HR
             services.AddDbContext<HRContext>(options =>
                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
 
             services.AddScoped(typeof(IEmployeeRepository), typeof(EmployeeRepository));
             services.AddScoped(typeof(ILogEmployeeRepository), typeof(LogEmployeeRepository));

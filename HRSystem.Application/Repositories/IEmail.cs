@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IEmailRepository : IBaseRepository<Email>
+    public interface IEmailRepository : IAsyncRepository<Email>
     {
         Task<ICollection<Email>> GetAllByEmployee(int employeeID);
     }

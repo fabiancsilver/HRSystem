@@ -100,6 +100,7 @@ namespace HRSystem.Persistence.HR
               {
                   eb.HasNoKey();
                   eb.ToView("RetentionRateView");
+                  eb.Property(p => p.Rate).HasColumnType("decimal(12,2)");
               });            
         }
 

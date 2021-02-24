@@ -2,7 +2,7 @@
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IEmailTypeRepository : IBaseRepository<EmailType>
+    public interface IEmailTypeRepository : IAsyncRepository<EmailType>
     {
     }
 }

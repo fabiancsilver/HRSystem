@@ -12,26 +12,15 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class ColorRepository : IColorRepository
+    public class ColorRepository : BaseRepository<Color>, IColorRepository
     {
-        protected readonly HRContext _context;
-
-        public ColorRepository(HRContext context)
+        
+        public ColorRepository(HRContext context) : base(context)
         {
-            _context = context;
-        }
+        
+        }       
 
-        public void Create(Color entity)
-        {
-            _context.Colors.Add(entity);
-        }
-
-        public Task<Color> FirstOrDefault(Expression<Func<Color, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Color>> GetAll(QueryParameters queryParameters)
+        public override async Task<IEnumerable<Color>> GetAll(QueryParameters queryParameters)
         {
             Dictionary<string, string> dictionarySort = new Dictionary<string, string>() {
                 { "Name", "Name" },
@@ -42,38 +31,13 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "Name", "Name" }
             };
 
-            var list = _context.Colors
-                               .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
-                               .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
-                               .AsQueryable();
+            var list = _dbContext.Colors
+                                   .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
+                                   .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
+                                   .AsQueryable();
 
 
             return await list.ToListAsync();
-        }
-
-        public async Task<Color> GetById(int id)
-        {
-            return await _context.Colors.FindAsync(id);
-        }
-
-        public async Task Remove(int id)
-        {
-            var item = await _context.Colors.FindAsync(id);
-            if (item == null)
-            {
-                throw new ArgumentException();
-            }
-            _context.Remove(item);
-        }
-
-        public async Task<int> SaveChanges()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
-        public void Update(int id, Color entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-        }
+        }  
     }
 }

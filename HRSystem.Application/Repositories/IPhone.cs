@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IPhoneRepository : IBaseRepository<Phone>
+    public interface IPhoneRepository : IAsyncRepository<Phone>
     {
         Task<ICollection<Phone>> GetAllByEmployee(int employeeID);
 

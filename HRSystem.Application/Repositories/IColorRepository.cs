@@ -2,7 +2,7 @@
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IColorRepository : IBaseRepository<Color>
+    public interface IColorRepository : IAsyncRepository<Color>
     {
     }
 }

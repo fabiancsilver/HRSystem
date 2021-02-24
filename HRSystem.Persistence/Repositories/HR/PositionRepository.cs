@@ -11,21 +11,15 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class PositionRepository : IPositionRepository
-    {
-        protected readonly HRContext _context;
+    public class PositionRepository : BaseRepository<Position>, IPositionRepository
+    {        
 
-        public PositionRepository(HRContext context)
-        {
-            _context = context;
-        }
+        public PositionRepository(HRContext context) : base(context)
+        {            
+        
+        }       
 
-        public void Create(Position entity)
-        {
-            _context.Positions.Add(entity);
-        }
-
-        public async Task<IEnumerable<Position>> GetAll(QueryParameters queryParameters)
+        public override async Task<IEnumerable<Position>> GetAll(QueryParameters queryParameters)
         {
 
             Dictionary<string, string> dictionarySort = new Dictionary<string, string>() {
@@ -37,38 +31,13 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "Name", "Name" }
             };
 
-            var list = _context.Positions
+            var list = _dbContext.Positions
                                .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
                                .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
                                .AsQueryable();
 
 
             return await list.ToListAsync();
-        }
-
-        public async Task<Position> GetById(int id)
-        {
-            return await _context.Positions.FindAsync(id);
-        }
-
-        public async Task Remove(int id)
-        {
-            var item = await _context.Positions.FindAsync(id);
-            if (item == null)
-            {
-                throw new ArgumentException();
-            }
-            _context.Remove(item);
-        }
-
-        public async Task<int> SaveChanges()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
-        public void Update(int id, Position entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-        }
+        }        
     }
 }

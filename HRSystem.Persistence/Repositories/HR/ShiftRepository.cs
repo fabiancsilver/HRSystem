@@ -11,21 +11,14 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class ShiftRepository : IShiftRepository
+    public class ShiftRepository : BaseRepository<Shift>, IShiftRepository
     {
-        protected readonly HRContext _context;
-
-        public ShiftRepository(HRContext context)
+        public ShiftRepository(HRContext context) : base(context)
         {
-            _context = context;
-        }
+            
+        }       
 
-        public void Create(Shift entity)
-        {
-            _context.Shifts.Add(entity);
-        }
-
-        public async Task<IEnumerable<Shift>> GetAll(QueryParameters queryParameters)
+        public override async Task<IEnumerable<Shift>> GetAll(QueryParameters queryParameters)
         {
 
             Dictionary<string, string> dictionarySort = new Dictionary<string, string>() {
@@ -37,38 +30,13 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "Name", "Name" }
             };
 
-            var list = _context.Shifts
+            var list = _dbContext.Shifts
                                .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
                                .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
                                .AsQueryable();
 
 
             return await list.ToListAsync();
-        }
-
-        public async Task<Shift> GetById(int id)
-        {
-            return await _context.Shifts.FindAsync(id);
-        }
-
-        public async Task Remove(int id)
-        {
-            var item = await _context.Shifts.FindAsync(id);
-            if (item == null)
-            {
-                throw new ArgumentException();
-            }
-            _context.Remove(item);
-        }
-
-        public async Task<int> SaveChanges()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
-        public void Update(int id, Shift entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Application.Repositories
 {
-    public interface ILogEmployeeRepository : IBaseRepository<LogEmployee>
+    public interface ILogEmployeeRepository : IAsyncRepository<LogEmployee>
     {        
         Task<int> Log(Employee employee);
     }

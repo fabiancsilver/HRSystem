@@ -2,7 +2,7 @@
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IAddressTypeRepository : IBaseRepository<AddressType>
+    public interface IAddressTypeRepository : IAsyncRepository<AddressType>
     {
     }
 }

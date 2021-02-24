@@ -2,7 +2,7 @@
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IDepartmentRepository : IBaseRepository<Department>
+    public interface IDepartmentRepository : IAsyncRepository<Department>
     {
     }
 }

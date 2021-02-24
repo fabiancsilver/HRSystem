@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IAddressRepository : IBaseRepository<Address>
+    public interface IAddressRepository : IAsyncRepository<Address>
     {
         Task<Address> GetByEmployee(int id);
     }

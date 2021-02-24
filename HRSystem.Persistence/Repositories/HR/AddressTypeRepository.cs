@@ -12,21 +12,14 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class AddressTypeRepository : IAddressTypeRepository
+    public class AddressTypeRepository : BaseRepository<AddressType>, IAddressTypeRepository
     {
-        protected readonly HRContext _context;
-
-        public AddressTypeRepository(HRContext context)
+        public AddressTypeRepository(HRContext dbContext) : base(dbContext)
         {
-            _context = context;
+
         }
 
-        public void Create(AddressType entity)
-        {
-            _context.AddressTypes.Add(entity);
-        }
-
-        public async Task<IEnumerable<AddressType>> GetAll(QueryParameters queryParameters)
+        public override async Task<IEnumerable<AddressType>> GetAll(QueryParameters queryParameters)
         {
 
             Dictionary<string, string> dictionarySort = new Dictionary<string, string>() {
@@ -38,43 +31,13 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "Name", "Name" }
             };
 
-            var list = _context.AddressTypes
+            var list = _dbContext.AddressTypes
                                .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
                                .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
                                .AsQueryable();
 
 
             return await list.ToListAsync();
-        }
-
-        public async Task<AddressType> GetById(int id)
-        {
-            return await _context.AddressTypes.FindAsync(id);
-        }
-
-        public Task<IEnumerable<AddressType>> GetWhere(Expression<Func<AddressType, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task Remove(int id)
-        {
-            var item = await _context.AddressTypes.FindAsync(id);
-            if (item == null)
-            {
-                throw new ArgumentException();
-            }
-            _context.Remove(item);
-        }
-
-        public async Task<int> SaveChanges()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
-        public void Update(int id, AddressType entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
         }
     }
 }

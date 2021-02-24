@@ -2,7 +2,7 @@
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IStatusRepository : IBaseRepository<Status>
+    public interface IStatusRepository : IAsyncRepository<Status>
     {
     }
 }

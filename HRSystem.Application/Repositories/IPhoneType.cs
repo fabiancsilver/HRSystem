@@ -2,7 +2,7 @@
 
 namespace HRSystem.Application.Repositories
 {
-    public interface IPhoneTypeRepository : IBaseRepository<PhoneType>
+    public interface IPhoneTypeRepository : IAsyncRepository<PhoneType>
     {
     }
 }
