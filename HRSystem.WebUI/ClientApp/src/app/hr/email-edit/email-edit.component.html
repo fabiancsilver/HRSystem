@@ -1,0 +1,103 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Emails</mat-card-title>
+  </mat-card-header>
+
+  <form novalidate
+        autocomplete="off"
+        [formGroup]="form"
+        (ngSubmit)="submit()">
+
+    <mat-card-content fxLayout="column" fxLayoutGap="5px">
+      <div fxLayout="column" fxLayoutGap="15px" *ngFor="let email of emails.controls;" role="list">
+        <mat-card fxLayout="column" [formGroup]="email">
+
+          <div fxFlex="25">
+            <mat-form-field appearance="outline">
+              <mat-label for="emailTypeId">Email Type</mat-label>
+              <mat-select id="emailTypeId"
+                          formControlName="EmailTypeID"
+                          placeholder="Select One">
+                <mat-option *ngFor="let emailType of searchResultEmailTypes" [value]="emailType.EmailTypeID">
+                  {{emailType.Name}}
+                </mat-option>
+              </mat-select>
+
+              <mat-error *ngIf="email.get('EmailTypeID').errors?.required">
+                Email Type <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label for="emailNumberId">Email No.</mat-label>
+            <input id="emailNumberId"
+                   type="text"
+                   matInput
+                   formControlName="EmailAddress"
+                   placeholder="Email Address" />
+
+            <mat-error *ngIf="email.get('EmailAddress').errors?.required">
+              Email Address <strong>required</strong>
+            </mat-error>
+
+            <mat-error *ngIf="email.get('EmailAddress').errors?.maxlength">
+              Max length 128
+            </mat-error>
+          </mat-form-field>
+        </mat-card>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions fxLayout="row" fxLayoutGap="5px">
+      <button mat-raised-button
+              color="primary"
+              style="width:100px"
+              type="submit"
+              [title]="form.valid && form.dirty ? 'Valid Data' : 'Invalid Data'"
+              [disabled]="!form.valid || !form.dirty">
+        Save
+      </button>
+
+      <button mat-raised-button
+              color="accent"
+              style="width:100px"
+              type="button"
+              title="Add New"
+              [disabled]="form.get('EmailID') !== null && form.get('EmailID').value === 0"
+              (click)="newItem()">
+        Add New
+      </button>
+
+      <!--<button mat-raised-button
+              color=""
+              style="width:100px"
+              type="button"
+              title="Go Back"
+              [routerLink]="['/positions']">
+        Go Back
+      </button>-->
+      <!--<button mat-raised-button
+              color="warn"
+              style="width:100px"
+              type="button"
+              title="Delete"
+              (click)="openDeleteDialog()"
+              [disabled]="!form.get('EmailID').value">
+        Delete
+      </button>-->
+    </mat-card-actions>
+
+    <mat-card-footer fxLayout="row" *ngIf="errorMessage">
+      {{errorMessage}}
+    </mat-card-footer>
+
+  </form>
+</mat-card>
+
+<!--<div>
+  <br>Dirty: {{ form.dirty }}
+  <br>Touched: {{ form.touched }}
+  <br>Valid: {{ form.valid }}
+  <br>Value: {{ form.value | json }}
+</div>-->

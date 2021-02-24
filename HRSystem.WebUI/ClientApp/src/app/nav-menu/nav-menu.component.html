@@ -1,0 +1,82 @@
+<header>
+  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <!--<div class="container">
+
+  </div>-->
+    <a class="navbar-brand" [routerLink]="['/']">HR System</a>
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+            aria-label="Toggle navigation"
+            [attr.aria-expanded]="isExpanded"
+            (click)="toggle()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
+         [ngClass]="{ show: isExpanded }">
+
+      <ul class="navbar-nav flex-grow">
+        <!--<li class="nav-item"
+      [routerLinkActive]="['link-active']"
+      [routerLinkActiveOptions]="{ exact: true }">
+    <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+  </li>-->
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/employees']">Employees</a>
+        </li>
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/addressTypes']">Address Type</a>
+        </li>
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/departments']">Department</a>
+        </li>
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/shifts']">Shifts</a>
+        </li>
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/statuses']">Statuses</a>
+        </li>
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/emailTypes']">Email Types</a>
+        </li>
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/phoneTypes']">Phone Types</a>
+        </li>
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/colors']">Colors</a>
+        </li>
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/positions']">Positions</a>
+        </li>
+
+        <!--<li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/weeklyHireNumber']">Weekly Hire Numbers</a>
+        </li>
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/terminatedNumber']">Terminated Number</a>
+        </li>
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/numberOfEmployeeDepartment']">By Department</a>
+        </li>-->
+
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/reports']">Reports</a>
+        </li>
+
+
+      </ul>
+    </div>
+  </nav>
+</header>

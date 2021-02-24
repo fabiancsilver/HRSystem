@@ -1,0 +1,70 @@
+https://localhost:5001/Resources/Photos/b3c52fb4-4917-4904-a729-e8f63d006b42.png
+
+
+USE [HRSystemDB]
+GO
+
+/****** Object:  View [HR].[WeeklyHireNumberView]    Script Date: 2/22/2021 1:52:13 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE OR ALTER VIEW [HR].[WeeklyHireNumberView]
+AS
+SELECT        TOP (100) PERCENT DATEPART(YEAR, StartDate) AS Year, DATEPART(WEEK, StartDate) AS WEEK, COUNT(StartDate) AS HireNumber
+FROM            HR.Employees
+GROUP BY DATEPART(YEAR, StartDate), DATEPART(WEEK, StartDate)
+GO
+
+
+CREATE OR ALTER VIEW [HR].[TerminatedNumberView]
+AS
+SELECT        DATEPART(YEAR, EndDate) AS Year, COUNT(EndDate) AS Quantity
+FROM            HR.Employees
+WHERE        (DATEPART(YEAR, EndDate) = DATEPART(YEAR, GETDATE()))
+GROUP BY DATEPART(YEAR, EndDate)
+GO
+
+CREATE OR ALTER VIEW [HR].[NumberOfEmployeeManagerView]
+AS
+SELECT        e.Name AS Manager, m.Quantity
+FROM            HR.Employees AS e INNER JOIN
+                             (SELECT        ManagerID, COUNT(ManagerID) AS Quantity
+                               FROM            HR.Employees
+                               WHERE        (ManagerID IS NOT NULL) AND (EndDate IS NULL)
+                               GROUP BY ManagerID) AS m ON m.ManagerID = e.EmployeeID
+GO
+
+CREATE OR ALTER VIEW [HR].[NumberOfEmployeeDepartmentView]
+AS
+SELECT        d.DepartmentID, d.Name AS Department, COUNT(d.DepartmentID) AS Quantity
+FROM            HR.Employees AS e INNER JOIN
+                         HR.Departments AS d ON e.DepartmentID = d.DepartmentID
+WHERE        (e.EndDate IS NULL)
+GROUP BY d.DepartmentID, d.Name
+GO
+
+CREATE OR ALTER VIEW [HR].[AllTeamMembersView]
+AS
+SELECT  e.EmployeeID, e.Name, e.StartDate, e.EndDate, p.Name AS Position, d.Name AS Department, s.Name AS Status, sf.Name AS Shift, m.Name AS Manager, e.TeamMemberPhoto, c.Name AS FavoriteColor, 
+                         ph.PhoneNumber AS PreferredPhone
+FROM            HR.Employees AS e INNER JOIN
+                         HR.Positions AS p ON e.PositionID = p.PositionID INNER JOIN
+                         HR.Departments AS d ON e.DepartmentID = d.DepartmentID INNER JOIN
+                         HR.Statuses AS s ON e.StatusID = s.StatusID INNER JOIN
+                         HR.Shifts AS sf ON e.ShiftID = sf.ShiftID INNER JOIN
+                         HR.Colors AS c ON e.FavoriteColorID = c.ColorID LEFT OUTER JOIN
+                         HR.Phones AS ph ON e.PreferredPhoneID = ph.PhoneID LEFT OUTER JOIN
+                         HR.Employees AS m ON e.ManagerID = m.EmployeeID
+GO
+
+
+
+CREATE OR ALTER VIEW [HR].[RetentionRateView]
+AS
+SELECT        COUNT(StartDate) AS EmployeesTotal, COUNT(EndDate) AS EmployeesLeft, CASE WHEN ISNULL(COUNT([EndDate]), 0) > 0 THEN CAST(ISNULL(COUNT(EndDate), 0) AS decimal) / CAST(COUNT([StartDate]) AS decimal) 
+                         ELSE 0 END AS Rate
+FROM            HR.Employees
+GO

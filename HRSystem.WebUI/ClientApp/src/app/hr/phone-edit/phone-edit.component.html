@@ -1,0 +1,114 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Phones</mat-card-title>
+  </mat-card-header>
+
+  <form novalidate
+        autocomplete="off"
+        [formGroup]="form"
+        (ngSubmit)="submit()">    
+
+    <mat-card-content fxLayout="column" fxLayoutGap="5px">
+      <div fxLayout="column" fxLayoutGap="15px" *ngFor="let phone of phones.controls;" role="list">
+        <mat-card fxLayout="column" [formGroup]="phone">
+
+          <div fxFlex="25">
+            <mat-form-field appearance="outline">
+              <mat-label for="phoneTypeId">Phone Type</mat-label>
+              <mat-select id="phoneTypeId"
+                          formControlName="PhoneTypeID"
+                          placeholder="Select One">
+                <mat-option *ngFor="let phoneType of searchResultPhoneTypes" [value]="phoneType.PhoneTypeID">
+                  {{phoneType.Name}}
+                </mat-option>
+              </mat-select>
+
+              <mat-error *ngIf="phone.get('PhoneTypeID').errors?.required">
+                Phone Type <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label for="phoneNumberId">Phone No.</mat-label>
+            <input id="phoneNumberId"
+                   type="text"
+                   matInput
+                   formControlName="PhoneNumber"
+                   placeholder="PhoneNumber" />
+
+            <mat-error *ngIf="phone.get('PhoneNumber').errors?.required">
+              PhoneNumber <strong>required</strong>
+            </mat-error>
+
+            <mat-error *ngIf="phone.get('PhoneNumber').errors?.maxlength">
+              Max length 128
+            </mat-error>
+          </mat-form-field>
+
+          <mat-card-actions fxLayout="row" fxLayoutGap="5px">
+            <button mat-raised-button
+                    [color]="phone.get('PhoneID').value !== preferredPhoneID ? 'primary' : ''"
+                    style="width:150px"
+                    type="button"
+                    (click)="openMarkAsPreferredDialog(phone.get('EmployeeID').value, phone.get('PhoneID').value)"
+                    [disabled]="!form.valid || !phone.get('EmployeeID').value  || !phone.get('PhoneID').value || phone.get('PhoneID').value === preferredPhoneID">
+              {{phone.get('PhoneID').value !== preferredPhoneID ? 'Mark as Prefered' : 'Prefered Phone No.' }}
+            </button>
+          </mat-card-actions>          
+        </mat-card>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions fxLayout="row" fxLayoutGap="5px">
+      <button mat-raised-button
+              color="primary"
+              style="width:100px"
+              type="submit"
+              [title]="form.valid && form.dirty ? 'Valid Data' : 'Invalid Data'"
+              [disabled]="!form.valid || !form.dirty">
+        Save
+      </button>
+
+      <button mat-raised-button
+              color="accent"
+              style="width:100px"
+              type="button"
+              title="Add New"
+              [disabled]="form.get('PhoneID') !== null && form.get('PhoneID').value === 0"
+              (click)="newItem()">
+        Add New
+      </button>
+
+      <!--<button mat-raised-button
+            color=""
+            style="width:100px"
+            type="button"
+            title="Go Back"
+            [routerLink]="['/positions']">
+      Go Back
+    </button>-->
+      <!--<button mat-raised-button
+            color="warn"
+            style="width:100px"
+            type="button"
+            title="Delete"
+            (click)="openDeleteDialog()"
+            [disabled]="!form.get('PhoneID').value">
+      Delete
+    </button>-->
+    </mat-card-actions>
+
+    <mat-card-footer fxLayout="row" *ngIf="errorMessage">
+      {{errorMessage}}
+    </mat-card-footer>
+
+  </form>
+</mat-card>
+
+<!--<div>
+  <br>Dirty: {{ form.dirty }}
+  <br>Touched: {{ form.touched }}
+  <br>Valid: {{ form.valid }}
+  <br>Value: {{ form.value | json }}
+</div>-->

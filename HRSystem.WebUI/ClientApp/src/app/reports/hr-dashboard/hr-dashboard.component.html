@@ -1,0 +1,23 @@
+<h3>HR Dashboard</h3>
+<h5>Recruiting and retention metrics</h5>
+
+
+<div fxLayout="row">
+  <!--<div fxFlex="50" fxLayout="column" fxFlexFill>
+    <div fxFlex="20" style="background-color:darkblue;color:silver">
+      <p>Recruiting Rate (Last 6 months)</p>
+    </div>
+    <div fxFlex="80">
+      <h1>78%</h1>
+    </div>
+  </div>-->
+
+  <div fxFlex="50" fxLayout="column" fxFlexFill>
+    <div fxFlex="20" style="background-color:darkblue;color:silver">
+      <p>Retention Rate (Last 6 months)</p>
+    </div>
+    <div fxFlex="80">
+      <h1>{{retentionRate ? (retentionRate.Rate | percent) : 0}}</h1>
+    </div>
+  </div>
+</div>

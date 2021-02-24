@@ -1,0 +1,271 @@
+<mat-tab-group>
+  <mat-tab label="Basic Information">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Employee</mat-card-title>
+      </mat-card-header>
+
+
+      <form novalidate
+            autocomplete="off"
+            (ngSubmit)="submit()"
+            [formGroup]="form">
+
+        <mat-card-content fxLayout="column" fxLayoutGap="5px">
+          <div fxLayout="row" fxLayoutGap="5px">
+            <div fxFlex="60" fxLayout="column">
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label for="employeeId">ID</mat-label>
+                  <input id="employeeId"
+                         type="text"
+                         matInput
+                         formControlName="EmployeeID"
+                         placeholder="Employee"
+                         readonly="readonly" />
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline">
+                <mat-label for="nameId">Name</mat-label>
+                <input id="nameId"
+                       type="text"
+                       matInput
+                       formControlName="Name"
+                       placeholder="Name" />
+
+                <mat-error *ngIf="form.get('Name').errors?.required">
+                  Name <strong>required</strong>
+                </mat-error>
+
+                <mat-error *ngIf="form.get('Name').errors?.maxlength">
+                  Max length 128
+                </mat-error>
+              </mat-form-field>
+
+              <div fxLayout="row" fxLayoutGap="5px">
+                <mat-form-field fxFlex="50" appearance="outline">
+                  <mat-label for="startDateId">Start Date</mat-label>
+                  <input matInput
+                         id="startDateId"
+                         [matDatepicker]="pickerStartDate"
+                         formControlName="StartDate"
+                         placeholder="Start Date">
+                  <mat-datepicker-toggle matSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerStartDate></mat-datepicker>
+
+                  <mat-error *ngIf="form.get('StartDate').errors?.required">
+                    Start Date Required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="50" appearance="outline">
+                  <mat-label for="endDateId">End Date</mat-label>
+                  <input matInput
+                         id="endDateId"
+                         [matDatepicker]="pickerEndDate"
+                         formControlName="EndDate"
+                         placeholder="End Date">
+                  <mat-datepicker-toggle matSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerEndDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="row" fxLayoutGap="5px">
+                <mat-form-field fxFlex="50" appearance="outline">
+                  <mat-label for="positionId">Position</mat-label>
+                  <mat-select id="positionId"
+                              formControlName="PositionID"
+                              placeholder="Select One">
+                    <mat-option *ngFor="let position of searchResultPositions" [value]="position.PositionID">
+                      {{position.Name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.get('PositionID').errors?.required">
+                    Position <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="50" appearance="outline">
+                  <mat-label for="departmentId">Department</mat-label>
+                  <mat-select id="departmentId"
+                              formControlName="DepartmentID"
+                              placeholder="Select One">
+                    <mat-option *ngFor="let department of searchResultDepartments" [value]="department.DepartmentID">
+                      {{department.Name}}
+                    </mat-option>
+                  </mat-select>
+
+                  <mat-error *ngIf="form.get('DepartmentID').errors?.required">
+                    Department <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <app-upload-photo fxFlex="40" [EmployeeID]="form.get('EmployeeID').value"  [TeamMemberPhoto]="form.get('TeamMemberPhoto').value">
+
+            </app-upload-photo>
+          </div>
+
+          <div fxLayout="row" fxLayoutGap="5px">
+            <mat-form-field fxFlex="50" appearance="outline">
+              <mat-label for="shiftId">Shift</mat-label>
+              <mat-select id="shiftId"
+                          formControlName="ShiftID"
+                          placeholder="Select One">
+                <mat-option *ngFor="let shift of searchResultShifts" [value]="shift.ShiftID">
+                  {{shift.Name}}
+                </mat-option>
+              </mat-select>
+
+              <mat-error *ngIf="form.get('ShiftID').errors?.required">
+                Shift <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="50" appearance="outline">
+              <mat-label for="managerId">Manager</mat-label>
+              <mat-select id="managerId"
+                          formControlName="ManagerID"
+                          placeholder="Select One">
+                <mat-option *ngFor="let manager of searchResultManagers" [value]="manager.EmployeeID">
+                  {{manager.Name}}
+                </mat-option>
+              </mat-select>
+
+              <mat-error *ngIf="form.get('ManagerID').errors?.required">
+                Manager <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label for="favoriteColorId">Favorite Color</mat-label>
+            <mat-select id="favoriteColorId"
+                        formControlName="FavoriteColorID"
+                        placeholder="Select One">
+              <mat-option *ngFor="let favoriteColor of searchResultFavoriteColors" [value]="favoriteColor.ColorID">
+                {{favoriteColor.Name}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="form.get('FavoriteColorID').errors?.required">
+              Favorite Color <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label for="statusId">Status</mat-label>
+            <mat-select id="statusId"
+                        formControlName="StatusID"
+                        placeholder="Select One">
+              <mat-option *ngFor="let status of searchResultStatuses" [value]="status.StatusID">
+                {{status.Name}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="form.get('StatusID').errors?.required">
+              Status <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </mat-card-content>
+
+        <mat-card-actions fxLayout="row" fxLayoutGap="5px">
+          <button mat-raised-button
+                  color="primary"
+                  style="width:100px"
+                  type="submit"
+                  [title]="form.valid && form.dirty ? 'Valid Data' : 'Invalid Data'"
+                  [disabled]="!form.valid || !form.dirty">
+            Save
+          </button>
+
+          <button mat-raised-button
+                  color="accent"
+                  style="width:100px"
+                  type="button"
+                  title="Add New"
+                  [disabled]="form.get('EmployeeID') !== null && form.get('EmployeeID').value === 0"
+                  (click)="newItem()">
+            Add New
+          </button>
+
+          <button mat-raised-button
+                  color="warn"
+                  style="width:150px"
+                  type="button"
+                  title="Delete"
+                  (click)="openMarkAsTerminantedDialog()"
+                  [disabled]="!form.get('EmployeeID').value">
+            Mark as Terminated
+          </button>
+
+          <button mat-raised-button
+                  color=""
+                  style="width:150px"
+                  type="button"
+                  title="Go Back"
+                  [disabled]="!form.get('EmployeeID').valid || form.get('EmployeeID').value === 0"
+                  (click)="viewPermissions(+form.get('EmployeeID').value)">
+            View Permissions
+          </button>
+
+          <button mat-raised-button
+                  color=""
+                  style="width:100px"
+                  type="button"
+                  title="Go Back"
+                  [routerLink]="['/employees']">
+            Go Back
+          </button>
+
+          <button mat-raised-button
+                  color="warn"
+                  style="width:100px"
+                  type="button"
+                  title="Delete"
+                  (click)="openDeleteDialog()"
+                  [disabled]="!form.get('EmployeeID').value">
+            Delete
+          </button>
+        </mat-card-actions>
+
+        <mat-card-footer fxLayout="row" *ngIf="errorMessage">
+          {{errorMessage}}
+        </mat-card-footer>
+
+      </form>
+    </mat-card>
+  </mat-tab>
+
+
+  <mat-tab label="Address">
+    <ng-template matTabContent>
+      <app-address-edit [EmployeeID]="form.get('EmployeeID').value">
+      </app-address-edit>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Phone">
+    <ng-template matTabContent>
+      <app-phone-edit [EmployeeID]="form.get('EmployeeID').value" [PreferredPhoneID]="form.get('PreferredPhoneID').value"
+                      (PhoneChanged)="onPhoneChanged($event)">
+      </app-phone-edit>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="E-Mail">
+    <ng-template matTabContent>
+      <app-email-edit [EmployeeID]="form.get('EmployeeID').value">
+      </app-email-edit>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+
+<!--<div>
+  <br>Dirty: {{ form.dirty }}
+  <br>Touched: {{ form.touched }}
+  <br>Valid: {{ form.valid }}
+  <br>Value: {{ form.value | json }}
+</div>-->

@@ -1,0 +1,170 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Address</mat-card-title>
+  </mat-card-header>
+
+  <form novalidate
+        autocomplete="off"
+        (ngSubmit)="submit()"
+        [formGroup]="form">
+
+    <mat-card-content fxLayout="column" fxLayoutGap="5px">
+
+      <div fxLayout="column" fxLayoutGap="5px">
+        <mat-form-field fxFlex="75" appearance="outline">
+          <mat-label for="addressTypeId">Address Type</mat-label>
+          <mat-select id="addressTypeId"
+                      formControlName="AddressTypeID"
+                      placeholder="Select One">
+            <mat-option *ngFor="let addressType of searchResultAddressTypes" [value]="addressType.AddressTypeID">
+              {{addressType.Name}}
+            </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="form.get('AddressTypeID').errors?.required">
+            Address Type <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="5px">
+        <mat-form-field fxFlex="50" appearance="outline">
+          <mat-label for="line1Id">Street</mat-label>
+          <input id="line1Id"
+                 type="text"
+                 matInput
+                 formControlName="Line1"
+                 placeholder="Line1" />
+
+          <mat-error *ngIf="form.get('Line1').errors?.required">
+            Street <strong>required</strong>
+          </mat-error>
+
+          <mat-error *ngIf="form.get('Line1').errors?.maxlength">
+            Max length 128
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="50" appearance="outline">
+          <mat-label for="cityId">City</mat-label>
+          <input id="cityId"
+                 type="text"
+                 matInput
+                 formControlName="City"
+                 placeholder="City" />
+
+          <mat-error *ngIf="form.get('City').errors?.required">
+            City <strong>required</strong>
+          </mat-error>
+
+          <mat-error *ngIf="form.get('City').errors?.maxlength">
+            Max length 32
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="5px">
+        <mat-form-field fxFlex="33.3" appearance="outline">
+          <mat-label for="stateId">State</mat-label>
+          <input id="stateId"
+                 type="text"
+                 matInput
+                 formControlName="State"
+                 placeholder="State" />
+
+          <mat-error *ngIf="form.get('State').errors?.required">
+            State <strong>required</strong>
+          </mat-error>
+
+          <mat-error *ngIf="form.get('State').errors?.maxlength">
+            Max length 32
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="33.3" appearance="outline">
+          <mat-label for="countryId">Country</mat-label>
+          <input id="countryId"
+                 type="text"
+                 matInput
+                 formControlName="Country"
+                 placeholder="Country" />
+
+          <mat-error *ngIf="form.get('Country').errors?.required">
+            Country <strong>required</strong>
+          </mat-error>
+
+          <mat-error *ngIf="form.get('Country').errors?.maxlength">
+            Max length 32
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="33.3" appearance="outline">
+          <mat-label for="zipCodeId">Zip Code</mat-label>
+          <input id="zipCodeId"
+                 type="text"
+                 matInput
+                 formControlName="ZipCode"
+                 placeholder="Zip Code" />
+
+          <mat-error *ngIf="form.get('ZipCode').errors?.required">
+            Zip Code <strong>required</strong>
+          </mat-error>
+
+          <mat-error *ngIf="form.get('ZipCode').errors?.maxlength">
+            Max length 11
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions fxLayout="row" fxLayoutGap="5px">
+      <button mat-raised-button
+              color="primary"
+              style="width:100px"
+              type="submit"
+              [title]="form.valid && form.dirty ? 'Valid Data' : 'Invalid Data'"
+              [disabled]="!form.valid || !form.dirty">
+        Save
+      </button>
+
+      <!--<button mat-raised-button
+              color="accent"
+              style="width:100px"
+              type="button"
+              title="Add New"
+              [disabled]="form.get('AddressID') !== null && form.get('AddressID').value === 0"
+              (click)="newItem()">
+        Add New
+      </button>-->
+      <!--<button mat-raised-button
+              color=""
+              style="width:100px"
+              type="button"
+              title="Go Back"
+              [routerLink]="['/addresss']">
+        Go Back
+      </button>-->
+      <!--<button mat-raised-button
+              color="warn"
+              style="width:100px"
+              type="button"
+              title="Delete"
+              (click)="openDeleteDialog()"
+              [disabled]="!form.get('AddressID').value">
+        Delete
+      </button>-->
+    </mat-card-actions>
+
+    <mat-card-footer fxLayout="row" *ngIf="errorMessage">
+      {{errorMessage}}
+    </mat-card-footer>
+
+  </form>
+</mat-card>
+
+<!--<div>
+  <br>Dirty: {{ form.dirty }}
+  <br>Touched: {{ form.touched }}
+  <br>Valid: {{ form.valid }}
+  <br>Value: {{ form.value | json }}
+</div>-->

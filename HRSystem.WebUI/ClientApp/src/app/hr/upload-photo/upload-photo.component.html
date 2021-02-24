@@ -1,0 +1,20 @@
+<mat-card>
+  <mat-card-content>
+    <img mat-card-image
+         [src]="getTeamMemberPhoto()"
+         width="50px"
+         height="150px">
+  </mat-card-content>
+
+  <mat-card-actions>    
+    <div fxLayout="row" fxLayoutGAp="2px">
+      <div fxFlex="100">
+        <input mat-button
+
+               class="form-control"
+               type="file"
+               (change)="onChange($event)">
+      </div>     
+    </div>
+  </mat-card-actions>
+</mat-card>

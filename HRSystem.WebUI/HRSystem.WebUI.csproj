@@ -1,0 +1,142 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+    <SpaRoot>ClientApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+
+    <!-- Set this to true if you enable server-side prerendering -->
+    <BuildServerSideRenderer>false</BuildServerSideRenderer>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Content Remove="$(SpaRoot)**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\app\hr\address-type.model.ts" />
+    <None Remove="ClientApp\src\app\hr\address.model.ts" />
+    <None Remove="ClientApp\src\app\hr\color.model.ts" />
+    <None Remove="ClientApp\src\app\hr\department.model.ts" />
+    <None Remove="ClientApp\src\app\hr\email-type.model.ts" />
+    <None Remove="ClientApp\src\app\hr\email.model.ts" />
+    <None Remove="ClientApp\src\app\hr\employee.model.ts" />
+    <None Remove="ClientApp\src\app\hr\file-upload.service.ts" />
+    <None Remove="ClientApp\src\app\hr\hr.module.ts" />
+    <None Remove="ClientApp\src\app\hr\permission-employee.model.ts" />
+    <None Remove="ClientApp\src\app\hr\permission.model.ts" />
+    <None Remove="ClientApp\src\app\hr\permission.service.ts" />
+    <None Remove="ClientApp\src\app\hr\phone-type.model.ts" />
+    <None Remove="ClientApp\src\app\hr\phone.model.ts" />
+    <None Remove="ClientApp\src\app\hr\position.model.ts" />
+    <None Remove="ClientApp\src\app\hr\shift.model.ts" />
+    <None Remove="ClientApp\src\app\hr\status.model.ts" />
+    <None Remove="ClientApp\src\app\material.module.ts" />
+    <None Remove="ClientApp\src\app\reports\number-of-employee-department.model.ts" />
+    <None Remove="ClientApp\src\app\reports\number-of-employee-manager.model.ts" />
+    <None Remove="ClientApp\src\app\reports\retention-rate.model.ts" />
+    <None Remove="ClientApp\src\app\reports\terminated-number.model.ts" />
+    <None Remove="ClientApp\src\app\reports\weekly-hire-number.model.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\hr\address-type.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\address.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\color.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\department.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\email.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\permission-employee.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\employee.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\file-upload.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\hr.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\permission.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\permission.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\phone.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\position.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\phone-type.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\hr\email-type.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\hr\shift.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\hr\status.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\material.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\core\query-parameters.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\reports\number-of-employee-department.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\reports\number-of-employee-manager.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\reports\terminated-number.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\reports\retention-rate.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\reports\weekly-hire-number.model.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\assets\web-content\Photos\" />
+  </ItemGroup>
+
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">    
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+    <TypeScriptTarget>es2015</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>CommonJs</TypeScriptModuleKind>
+    <TypeScriptModuleResolution>node</TypeScriptModuleResolution>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+    <TypeScriptExperimentalDecorators>True</TypeScriptExperimentalDecorators>
+    <TypeScriptEmitDecoratorMetadata>True</TypeScriptEmitDecoratorMetadata>
+  </PropertyGroup>
+
+</Project>

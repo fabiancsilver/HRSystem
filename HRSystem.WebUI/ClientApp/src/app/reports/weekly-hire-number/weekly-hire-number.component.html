@@ -1,0 +1,26 @@
+<h3>Weekly Hire Numbers Report</h3>
+
+<div class="mat-elevation-z8">
+  <table mat-table
+         class="full-width-table"
+         [dataSource]="dataSource">
+
+    <ng-container matColumnDef="Year">
+      <th mat-header-cell *matHeaderCellDef>Year</th>
+      <td mat-cell *matCellDef="let row">{{row.Year}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Week">
+      <th mat-header-cell *matHeaderCellDef>Week</th>
+      <td mat-cell *matCellDef="let row">{{row.Week}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="HireNumber">
+      <th mat-header-cell *matHeaderCellDef>Hire Numbers</th>
+      <td mat-cell *matCellDef="let row">{{row.HireNumber}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table> 
+</div>
