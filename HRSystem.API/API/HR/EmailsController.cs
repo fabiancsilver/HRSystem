@@ -1,10 +1,9 @@
-﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+﻿using HRSystem.Application.Features.Emails.Commands.CreateEmail;
+using HRSystem.Application.Features.Emails.Commands.UpdateEmail;
+using HRSystem.Application.Features.Emails.Queries.GetEmailByEmployee;
 using HRSystem.Domain.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HRSystem.API.HR
@@ -13,120 +12,47 @@ namespace HRSystem.API.HR
     [ApiController]
     public class EmailsController : ControllerBase
     {
-        private readonly IEmailRepository _emailRepository;
-        private readonly ILogger<EmailsController> _logger;
+        private readonly IMediator _mediator;
 
-        public EmailsController(IEmailRepository emailRepository,
-                                ILogger<EmailsController> logger)
+        public EmailsController(IMediator mediator)
         {
-            _emailRepository = emailRepository;
-            _logger = logger;
-        }
-
-        // GET: api/<EmailsController>
-        [HttpGet]
-        public async Task<ActionResult<ICollection<Email>>> GetAll([FromQuery] QueryParameters queryParameters)
-        {
-            try
-            {
-                var emails = await _emailRepository.GetAll(queryParameters);
-
-
-                return Ok(emails);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
-        // GET: api/<EmailsController>/ByEmployee
-        [HttpGet("AllByEmployee/{employeeID}")]
-        public async Task<ActionResult<ICollection<Email>>> GetAllByEmployee(Int32 employeeID)
-        {
-            try
-            {
-                var emails = await _emailRepository.GetAllByEmployee(employeeID);
-
-                return Ok(emails);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            _mediator = mediator;
         }
 
         // GET api/<EmailsController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Email>> Get(int id)
+        [HttpGet("AllByEmployee/{employeeID}")]
+        public async Task<ActionResult<Email>> GetAllByEmployee(int employeeID)
         {
-            try
-            {
-                var email = await _emailRepository.GetById(id);
+            var getEmailsByEmployeeQuery = new GetEmailsByEmployeeQuery() { EmployeeID = employeeID };
+            var response = await _mediator.Send(getEmailsByEmployeeQuery);
 
-                return Ok(email);
-            }
-            catch (Exception ex)
+            if (response.Success == true)
             {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
+                return Ok(response.Emails);
+            }
+            else
+            {
+                return NotFound();
             }
         }
 
         // POST api/<EmailsController>
         [HttpPost]
-        public async Task<ActionResult<Email>> Post(Email email)
+        public async Task<ActionResult<Email>> Post(CreateEmailCommand createEmailCommand)
         {
-            try
-            {
-                _emailRepository.Create(email);
-                await _emailRepository.SaveChanges();
+            var response = await _mediator.Send(createEmailCommand);
 
-                return Ok(email);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Email);
         }
 
         // PUT api/<EmailsController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Email>> Put(int id, Email email)
+        public async Task<ActionResult<Email>> Put(int id, UpdateEmailCommand updateEmailCommand)
         {
-            try
-            {
-                _emailRepository.Update(id, email);
-                await _emailRepository.SaveChanges();
+            updateEmailCommand.EmailID = id;
+            var response = await _mediator.Send(updateEmailCommand);
 
-                return Ok(email);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
-        // DELETE api/<EmailsController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                await _emailRepository.Remove(id);
-                await _emailRepository.SaveChanges();
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Email);
         }
     }
 }

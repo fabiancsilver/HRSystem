@@ -1,6 +1,5 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
-using HRSystem.Persistence.HR;
+using HRSystem.Application.Contracts.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,31 +10,37 @@ namespace HRSystem.Persistence.Repositories
 {
     public class BaseRepository<T> : IAsyncRepository<T> where T : class
     {
-        protected readonly HRContext _dbContext;
+        protected readonly DbContext _dbContext;
 
-        public BaseRepository(HRContext dbContext)
+        public BaseRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         public virtual async Task<T> GetById(int id)
         {
-            return await _dbContext.Set<T>().FindAsync(id);
+            return await _dbContext.Set<T>()
+                                   .FindAsync(id);
         }
 
         public virtual async Task<IEnumerable<T>> GetAll(QueryParameters queryParameters)
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await _dbContext.Set<T>()
+                                   .ToListAsync();
         }
 
         public async virtual Task<IReadOnlyList<T>> GetPagedReponse(int page, int size)
         {
-            return await _dbContext.Set<T>().Skip((page - 1) * size).Take(size).AsNoTracking().ToListAsync();
+            return await _dbContext.Set<T>().Skip((page - 1) * size)
+                                   .Take(size)
+                                   .AsNoTracking()
+                                   .ToListAsync();
         }
 
         public void Create(T entity)
         {
-            _dbContext.Set<T>().Add(entity);
+            _dbContext.Set<T>()
+                      .Add(entity);
         }
 
         public void Update(int id, T entity)
@@ -45,13 +50,13 @@ namespace HRSystem.Persistence.Repositories
 
         public async Task Remove(int id)
         {
-            var item = await _dbContext.Set<T>().FindAsync(id);
+            var item = await _dbContext.Set<T>()
+                                       .FindAsync(id);
             if (item == null)
             {
                 throw new ArgumentException();
             }
             _dbContext.Remove(item);
-
         }
 
         public async Task<int> SaveChanges()

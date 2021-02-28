@@ -1,10 +1,10 @@
-﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+﻿using HRSystem.Application.Features.Addresses.Commands.CreateAddress;
+using HRSystem.Application.Features.Addresses.Commands.UpdateAddress;
+using HRSystem.Application.Features.Addresses.Queries.GetAddressByEmployee;
+
 using HRSystem.Domain.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HRSystem.API.HR
@@ -13,121 +13,47 @@ namespace HRSystem.API.HR
     [ApiController]
     public class AddressesController : ControllerBase
     {
-        private readonly IAddressRepository _addressRepository;
-        private readonly ILogger<AddressesController> _logger;
+        private readonly IMediator _mediator;
 
-        public AddressesController(IAddressRepository addressRepository,
-                                    ILogger<AddressesController> logger)
+        public AddressesController(IMediator mediator)
         {
-            _addressRepository = addressRepository;
-            _logger = logger;
+            _mediator = mediator;
         }
 
-        // GET: api/<AddresssController>
-        [HttpGet]
-        public async Task<ActionResult<ICollection<Address>>> GetAll([FromQuery] QueryParameters queryParameters)
-        {
-            try
-            {
-                var addresss = await _addressRepository.GetAll(queryParameters);
-
-
-                return Ok(addresss);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
-        // GET api/<AddresssController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Address>> Get(int id)
-        {
-            try
-            {
-                var address = await _addressRepository.GetById(id);
-
-                return Ok(address);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
-        // GET api/<AddresssController>/5
+        // GET api/<AddressesController>/5
         [HttpGet("ByEmployee/{employeeID}")]
         public async Task<ActionResult<Address>> GetByEmployee(int employeeID)
         {
-            try
-            {
-                var address = await _addressRepository.GetByEmployee(employeeID);
+            var getAddressByEmployeeQuery = new GetAddressByEmployeeQuery() { EmployeeID = employeeID };
+            var response = await _mediator.Send(getAddressByEmployeeQuery);
 
-                return Ok(address);
-            }
-            catch (Exception ex)
+            if (response.Success == true)
             {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
+                return Ok(response.Address);
+            }
+            else
+            {
+                return NotFound();
             }
         }
 
-        // POST api/<AddresssController>
+        // POST api/<AddressesController>
         [HttpPost]
-        public async Task<ActionResult<Address>> Post(Address address)
+        public async Task<ActionResult<Address>> Post(CreateAddressCommand createAddressCommand)
         {
-            try
-            {
-                _addressRepository.Create(address);
-                await _addressRepository.SaveChanges();
+            var response = await _mediator.Send(createAddressCommand);
 
-                return Ok(address);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Address);
         }
 
-        // PUT api/<AddresssController>/5
+        // PUT api/<AddressesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Address>> Put(int id, Address address)
+        public async Task<ActionResult<Address>> Put(int id, UpdateAddressCommand updateAddressCommand)
         {
-            try
-            {
-                _addressRepository.Update(id, address);
-                await _addressRepository.SaveChanges();
+            updateAddressCommand.AddressID = id;
+            var response = await _mediator.Send(updateAddressCommand);
 
-                return Ok(address);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
-        // DELETE api/<AddresssController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                await _addressRepository.Remove(id);
-                await _addressRepository.SaveChanges();
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-
+            return Ok(response.Address);
         }
     }
 }

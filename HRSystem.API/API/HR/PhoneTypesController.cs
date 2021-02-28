@@ -1,9 +1,12 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Features.PhoneTypes.Commands.CreatePhoneType;
+using HRSystem.Application.Features.PhoneTypes.Commands.DeletePhoneType;
+using HRSystem.Application.Features.PhoneTypes.Commands.UpdatePhoneType;
+using HRSystem.Application.Features.PhoneTypes.Queries.GetPhoneType;
+using HRSystem.Application.Features.PhoneTypes.Queries.GetPhoneTypes;
 using HRSystem.Domain.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,105 +16,63 @@ namespace HRSystem.API.HR
     [ApiController]
     public class PhoneTypesController : ControllerBase
     {
-        private readonly IPhoneTypeRepository _phoneTypeRepository;
-        private readonly ILogger<PhoneTypesController> _logger;
+        private readonly IMediator _mediator;
 
-        public PhoneTypesController(IPhoneTypeRepository phoneTypeRepository,
-                                ILogger<PhoneTypesController> logger)
+        public PhoneTypesController(IMediator mediator)
         {
-            _phoneTypeRepository = phoneTypeRepository;
-            _logger = logger;
+            _mediator = mediator;
         }
 
         // GET: api/<PhoneTypesController>
         [HttpGet]
         public async Task<ActionResult<ICollection<PhoneType>>> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            try
-            {
-                var phoneTypes = await _phoneTypeRepository.GetAll(queryParameters);
+            var getPhoneTypesCommand = new GetPhoneTypesQuery() { queryParameters = queryParameters };
+            var response = await _mediator.Send(getPhoneTypesCommand);
 
-
-                return Ok(phoneTypes);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response);
         }
 
         // GET api/<PhoneTypesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PhoneType>> Get(int id)
         {
-            try
-            {
-                var phoneType = await _phoneTypeRepository.GetById(id);
 
-                return Ok(phoneType);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var getPhoneTypeCommand = new GetPhoneTypeQuery() { PhoneTypeID = id };
+            var response = await _mediator.Send(getPhoneTypeCommand);
+
+            return Ok(response);
 
         }
 
         // POST api/<PhoneTypesController>
         [HttpPost]
-        public async Task<ActionResult<PhoneType>> Post(PhoneType phoneType)
+        public async Task<ActionResult<PhoneType>> Post(CreatePhoneTypeCommand createPhoneTypeCommand)
         {
-            try
-            {
-                _phoneTypeRepository.Create(phoneType);
-                await _phoneTypeRepository.SaveChanges();
+            var response = await _mediator.Send(createPhoneTypeCommand);
 
-                return Ok(phoneType);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.PhoneType);
         }
 
         // PUT api/<PhoneTypesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<PhoneType>> Put(int id, PhoneType phoneType)
+        public async Task<ActionResult<PhoneType>> Put(int id, UpdatePhoneTypeCommand updatePhoneTypeCommand)
         {
-            try
-            {
-                _phoneTypeRepository.Update(id, phoneType);
-                await _phoneTypeRepository.SaveChanges();
+            updatePhoneTypeCommand.PhoneTypeID = id;
+            var response = await _mediator.Send(updatePhoneTypeCommand);
 
-                return Ok(phoneType);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.PhoneType);
         }
 
         // DELETE api/<PhoneTypesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _phoneTypeRepository.Remove(id);
-                await _phoneTypeRepository.SaveChanges();
+            var deletePhoneTypeCommand = new DeletePhoneTypeCommand() { PhoneTypeID = id };
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _mediator.Send(deletePhoneTypeCommand);
 
+            return Ok(response.PhoneType);
         }
     }
 }

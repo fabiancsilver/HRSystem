@@ -8,4 +8,20 @@
     <ProjectReference Include="..\HRSystem.Domain\HRSystem.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Infrastructure\NotificationEmployees\" />
+    <Folder Include="Features\Infrastructure\PermissionEmployees\Commands\" />
+    <Folder Include="Features\LogEmployees\Commands\" />
+    <Folder Include="Features\LogEmployees\Queries\" />
+    <Folder Include="Model\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="FluentValidation" Version="9.5.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="9.5.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+  </ItemGroup>
+
 </Project>

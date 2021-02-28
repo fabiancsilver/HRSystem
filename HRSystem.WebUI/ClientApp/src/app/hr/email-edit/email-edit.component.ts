@@ -31,12 +31,12 @@ export class EmailEditComponent implements OnInit, OnChanges {
 
 
   constructor(private fb: FormBuilder,
-              private serviceData: EmailService,
-              private emailTypeService: EmailTypeService,
-              private dialogService: DialogService,
-              private dialog: MatDialog,
-              private activatedRoute: ActivatedRoute,
-              private route: Router) {
+    private serviceData: EmailService,
+    private emailTypeService: EmailTypeService,
+    private dialogService: DialogService,
+    private dialog: MatDialog,
+    private activatedRoute: ActivatedRoute,
+    private route: Router) {
 
     this.errorMessage = '';
   }

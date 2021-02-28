@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 
 import { DialogService } from '../../core/dialog.service';
 import { AddressType } from '../address-type.model';
@@ -66,21 +66,17 @@ export class AddressEditComponent implements OnInit, OnChanges {
             else {
               this.initialize();
             }
-          }))
+          }),
+          catchError(() => {
+            this.initialize();
+            return of({});
+          })
+        )
         .subscribe(
           null,
           (error) => this.errorMessage = error);
     }
   }
-
-  //getItem(itemID: number): void {
-  //  this.serviceData.getByEmployee(itemID)
-  //    .pipe(
-  //      tap((item) => this.displayItem(item)))
-  //    .subscribe(
-  //      null,
-  //      (error) => this.errorMessage = error);
-  //}
 
   submit(): void {
 

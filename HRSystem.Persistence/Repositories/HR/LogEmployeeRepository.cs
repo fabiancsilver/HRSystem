@@ -1,5 +1,5 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Domain.HR;
 using HRSystem.Persistence.HR;
 using System;
@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class LogEmployeeRepository : BaseRepository<LogEmployee>, ILogEmployeeRepository
-    {   
-
+    public class LogEmployeeRepository : HRRepository<LogEmployee>, ILogEmployeeRepository
+    {
+                
         public LogEmployeeRepository(HRContext context) : base(context)
         {
             
@@ -33,7 +33,7 @@ namespace HRSystem.Persistence.Repositories.HR
             logEmployee.FavoriteColorID = employee.FavoriteColorID;
             logEmployee.PreferredPhoneID = employee.PreferredPhoneID;
 
-            _dbContext.LogEmployees.Add(logEmployee);
+            _hrDbContext.LogEmployees.Add(logEmployee);
             return await _dbContext.SaveChangesAsync();
         }        
     }

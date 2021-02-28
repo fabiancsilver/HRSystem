@@ -1,9 +1,13 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Features.Statuses.Commands.CreateStatus;
+using HRSystem.Application.Features.Statuses.Commands.DeleteStatus;
+using HRSystem.Application.Features.Statuses.Commands.UpdateStatus;
+using HRSystem.Application.Features.Statuses.Queries.GetStatus;
+using HRSystem.Application.Features.Statuses.Queries.GetStatuses;
+
 using HRSystem.Domain.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,105 +17,63 @@ namespace HRSystem.API.HR
     [ApiController]
     public class StatusesController : ControllerBase
     {
-        private readonly IStatusRepository _statusRepository;
-        private readonly ILogger<StatusesController> _logger;
+        private readonly IMediator _mediator;
 
-        public StatusesController(IStatusRepository statusRepository,
-                                ILogger<StatusesController> logger)
+        public StatusesController(IMediator mediator)
         {
-            _statusRepository = statusRepository;
-            _logger = logger;
+            _mediator = mediator;
         }
 
         // GET: api/<StatusesController>
         [HttpGet]
         public async Task<ActionResult<ICollection<Status>>> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            try
-            {
-                var statuss = await _statusRepository.GetAll(queryParameters);
+            var getStatusesCommand = new GetStatusesQuery() { queryParameters = queryParameters };
+            var response = await _mediator.Send(getStatusesCommand);
 
-
-                return Ok(statuss);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response);
         }
 
         // GET api/<StatusesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Status>> Get(int id)
         {
-            try
-            {
-                var status = await _statusRepository.GetById(id);
 
-                return Ok(status);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var getStatusCommand = new GetStatusQuery() { StatusID = id };
+            var response = await _mediator.Send(getStatusCommand);
+
+            return Ok(response);
 
         }
 
         // POST api/<StatusesController>
         [HttpPost]
-        public async Task<ActionResult<Status>> Post(Status status)
+        public async Task<ActionResult<Status>> Post(CreateStatusCommand createStatusCommand)
         {
-            try
-            {
-                _statusRepository.Create(status);
-                await _statusRepository.SaveChanges();
+            var response = await _mediator.Send(createStatusCommand);
 
-                return Ok(status);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Status);
         }
 
         // PUT api/<StatusesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Status>> Put(int id, Status status)
+        public async Task<ActionResult<Status>> Put(int id, UpdateStatusCommand updateStatusCommand)
         {
-            try
-            {
-                _statusRepository.Update(id, status);
-                await _statusRepository.SaveChanges();
+            updateStatusCommand.StatusID = id;
+            var response = await _mediator.Send(updateStatusCommand);
 
-                return Ok(status);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Status);
         }
 
         // DELETE api/<StatusesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _statusRepository.Remove(id);
-                await _statusRepository.SaveChanges();
+            var deleteStatusCommand = new DeleteStatusCommand() { StatusID = id };
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _mediator.Send(deleteStatusCommand);
 
+            return Ok(response.Status);
         }
     }
 }

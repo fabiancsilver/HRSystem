@@ -1,9 +1,12 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Features.Departments.Commands.CreateDepartment;
+using HRSystem.Application.Features.Departments.Commands.DeleteDepartment;
+using HRSystem.Application.Features.Departments.Commands.UpdateDepartment;
+using HRSystem.Application.Features.Departments.Queries.GetDepartment;
+using HRSystem.Application.Features.GetDepartments.Queries.GetDepartments;
 using HRSystem.Domain.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,105 +16,61 @@ namespace HRSystem.API.HR
     [ApiController]
     public class DepartmentsController : ControllerBase
     {
-        private readonly IDepartmentRepository _departmentRepository;
-        private readonly ILogger<DepartmentsController> _logger;
+        private readonly IMediator _mediator;
 
-        public DepartmentsController(IDepartmentRepository departmentRepository,
-                                ILogger<DepartmentsController> logger)
+        public DepartmentsController(IMediator mediator)
         {
-            _departmentRepository = departmentRepository;
-            _logger = logger;
+            _mediator = mediator;
         }
 
         // GET: api/<DepartmentsController>
         [HttpGet]
         public async Task<ActionResult<ICollection<Department>>> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            try
-            {
-                var departments = await _departmentRepository.GetAll(queryParameters);
+            var getDepartmentsQuery = new GetDepartmentsQuery() { queryParameters = queryParameters };
+            var response = await _mediator.Send(getDepartmentsQuery);
 
-
-                return Ok(departments);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response);
         }
 
         // GET api/<DepartmentsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Department>> Get(int id)
         {
-            try
-            {
-                var department = await _departmentRepository.GetById(id);
+            var getDepartmentCommand = new GetDepartmentQuery() { DepartmentID = id };
+            var response = await _mediator.Send(getDepartmentCommand);
 
-                return Ok(department);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-
+            return Ok(response);
         }
 
         // POST api/<DepartmentsController>
         [HttpPost]
-        public async Task<ActionResult<Department>> Post(Department department)
+        public async Task<ActionResult<Department>> Post(CreateDepartmentCommand createDepartmentCommand)
         {
-            try
-            {
-                _departmentRepository.Create(department);
-                await _departmentRepository.SaveChanges();
+            var response = await _mediator.Send(createDepartmentCommand);
 
-                return Ok(department);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Department);
         }
 
         // PUT api/<DepartmentsController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Department>> Put(int id, Department department)
+        public async Task<ActionResult<Department>> Put(int id, UpdateDepartmentCommand updateDepartmentCommand)
         {
-            try
-            {
-                _departmentRepository.Update(id, department);
-                await _departmentRepository.SaveChanges();
+            updateDepartmentCommand.DepartmentID = id;
+            var response = await _mediator.Send(updateDepartmentCommand);
 
-                return Ok(department);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Department);
         }
 
         // DELETE api/<DepartmentsController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _departmentRepository.Remove(id);
-                await _departmentRepository.SaveChanges();
+            var deleteDepartmentCommand = new DeleteDepartmentCommand() { DepartmentID = id };
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _mediator.Send(deleteDepartmentCommand);
 
+            return Ok(response.Department);
         }
     }
 }

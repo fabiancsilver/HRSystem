@@ -1,5 +1,6 @@
+using HRSystem.Application;
 using HRSystem.Persistence.Infrastructure;
-using HRSystem.Persistence.Repositories.HR;
+using HRSystem.Persistence.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,18 +14,20 @@ namespace HRSystem.API
 {
     public class Startup
     {
+
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
+        }        
 
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddHRPersistenceServices(Configuration);
-            services.AddScoped(typeof(NotificationService));
+            services.AddApplicationServices();
+            services.AddPersistenceServices(Configuration);
+            //services.AddScoped(typeof(NotificationService));
 
             services.AddControllers()
                    .AddJsonOptions(options =>

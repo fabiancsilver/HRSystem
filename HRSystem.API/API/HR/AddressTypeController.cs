@@ -1,9 +1,13 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Features.AddressTypes.Commands.CreateAddressType;
+using HRSystem.Application.Features.AddressTypes.Commands.DeleteAddressType;
+using HRSystem.Application.Features.AddressTypes.Commands.UpdateAddressType;
+using HRSystem.Application.Features.AddressTypes.Queries.GetAddressType;
+using HRSystem.Application.Features.AddressTypes.Queries.GetAddressTypes;
+
 using HRSystem.Domain.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,105 +17,63 @@ namespace HRSystem.API.HR
     [ApiController]
     public class AddressTypesController : ControllerBase
     {
-        private readonly IAddressTypeRepository _addressTypeRepository;
-        private readonly ILogger<AddressTypesController> _logger;
+        private readonly IMediator _mediator;
 
-        public AddressTypesController(IAddressTypeRepository addressTypeRepository,
-                                      ILogger<AddressTypesController> logger)
+        public AddressTypesController(IMediator mediator)
         {
-            _addressTypeRepository = addressTypeRepository;
-            _logger = logger;
+            _mediator = mediator;
         }
 
         // GET: api/<AddressTypesController>
         [HttpGet]
         public async Task<ActionResult<ICollection<AddressType>>> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            try
-            {
-                var addressTypes = await _addressTypeRepository.GetAll(queryParameters);
+            var getAddressTypesCommand = new GetAddressTypesQuery() { queryParameters = queryParameters };
+            var response = await _mediator.Send(getAddressTypesCommand);
 
-
-                return Ok(addressTypes);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response);
         }
 
         // GET api/<AddressTypesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AddressType>> Get(int id)
         {
-            try
-            {
-                var addressType = await _addressTypeRepository.GetById(id);
 
-                return Ok(addressType);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var getAddressTypeCommand = new GetAddressTypeQuery() { AddressTypeID = id };
+            var response = await _mediator.Send(getAddressTypeCommand);
+
+            return Ok(response);
 
         }
 
         // POST api/<AddressTypesController>
         [HttpPost]
-        public async Task<ActionResult<AddressType>> Post(AddressType addressType)
+        public async Task<ActionResult<AddressType>> Post(CreateAddressTypeCommand createAddressTypeCommand)
         {
-            try
-            {
-                _addressTypeRepository.Create(addressType);
-                await _addressTypeRepository.SaveChanges();
+            var response = await _mediator.Send(createAddressTypeCommand);
 
-                return Ok(addressType);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.AddressType);
         }
 
         // PUT api/<AddressTypesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<AddressType>> Put(int id, AddressType addressType)
+        public async Task<ActionResult<AddressType>> Put(int id, UpdateAddressTypeCommand updateAddressTypeCommand)
         {
-            try
-            {
-                _addressTypeRepository.Update(id, addressType);
-                await _addressTypeRepository.SaveChanges();
+            updateAddressTypeCommand.AddressTypeID = id;
+            var response = await _mediator.Send(updateAddressTypeCommand);
 
-                return Ok(addressType);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.AddressType);
         }
 
         // DELETE api/<AddressTypesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _addressTypeRepository.Remove(id);
-                await _addressTypeRepository.SaveChanges();
+            var deleteAddressTypeCommand = new DeleteAddressTypeCommand() { AddressTypeID = id };
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _mediator.Send(deleteAddressTypeCommand);
 
+            return Ok(response.AddressType);
         }
     }
 }

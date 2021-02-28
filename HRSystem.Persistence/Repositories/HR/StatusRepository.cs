@@ -1,19 +1,18 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Domain.HR;
 using HRSystem.Persistence.Common;
 using HRSystem.Persistence.HR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class StatusRepository : BaseRepository<Status>, IStatusRepository
+    public class StatusRepository : HRRepository<Status>, IStatusRepository
     {
-        public StatusRepository(HRContext context) : base(context)
+        public StatusRepository(HRContext hrDbContext) : base(hrDbContext)
         {
             
         }
@@ -30,10 +29,10 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "Name", "Name" }
             };
 
-            var list = _dbContext.Statuses
-                               .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
-                               .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
-                               .AsQueryable();
+            var list = _hrDbContext.Statuses
+                                    .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
+                                    .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
+                                    .AsQueryable();
 
 
             return await list.ToListAsync();

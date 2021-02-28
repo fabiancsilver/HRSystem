@@ -1,5 +1,5 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Domain.HR;
 using HRSystem.Persistence.Common;
 using HRSystem.Persistence.HR;
@@ -11,11 +11,12 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
+    public class EmployeeRepository : HRRepository<Employee>, IEmployeeRepository
     {
+        
         public EmployeeRepository(HRContext context) : base(context)
         {
-            
+        
         }       
 
         public override async Task<IEnumerable<Employee>> GetAll(QueryParameters queryParameters)
@@ -43,7 +44,7 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "Status", "Status.Name" }
             };
 
-            return await _dbContext.Employees
+            return await _hrDbContext.Employees
                                  .Include(x => x.Position)
                                  .Include(x => x.Department)
                                  .Include(x => x.Shift)
@@ -60,7 +61,7 @@ namespace HRSystem.Persistence.Repositories.HR
 
         public async Task UpdatePhoto(int employeeID, string pathPhoto)
         {
-            var employee = await _dbContext.Employees
+            var employee = await _hrDbContext.Employees
                                          .FindAsync(employeeID);
 
             if (employee == null)

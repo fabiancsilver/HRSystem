@@ -1,5 +1,4 @@
 ﻿using HRSystem.Domain.HR;
-using HRSystem.Domain.Infrastructure;
 using HRSystem.Domain.Report;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,28 +50,12 @@ namespace HRSystem.Persistence.HR
             modelBuilder.Entity<Color>().ToTable("Colors");
             modelBuilder.Entity<Color>().HasIndex(s => s.Name).IsUnique();
 
-            modelBuilder.Entity<Permission>().ToTable("Permissions");
-
-            modelBuilder.Entity<PermissionEmployee>().ToTable("PermissionEmployee");
-            modelBuilder.Entity<PermissionEmployee>()
-                        .HasKey(s => new { s.PermissionID,s.EmployeeID });
-
-
-            modelBuilder.Entity<Notification>().ToTable("Notifications");
-
-            modelBuilder.Entity<NotificationEmployee>().ToTable("NotificationEmployee");
-            modelBuilder.Entity<NotificationEmployee>()
-                        .HasKey(s => new { s.NotificationID, s.EmployeeID });
-
-
-
             modelBuilder.Entity<WeeklyHireNumber>(
             eb =>
             {
                 eb.HasNoKey();
                 eb.ToView("WeeklyHireNumberView");
             });
-
 
             modelBuilder.Entity<TerminatedNumber>(
                eb =>
@@ -128,17 +111,7 @@ namespace HRSystem.Persistence.HR
 
         public DbSet<Shift> Shifts { get; set; }
 
-        public DbSet<Color> Colors { get; set; }
-
-        public DbSet<Permission> Permissions { get; set; }
-
-        public DbSet<PermissionEmployee> PermissionEmployee { get; set; }
-
-
-        public DbSet<Notification> Notifications { get; set; }
-
-        public DbSet<NotificationEmployee> NotificationEmployee { get; set; }
-
+        public DbSet<Color> Colors { get; set; }    
 
 
         public DbSet<RetentionRate> RetentionRate { get; set; }

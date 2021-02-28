@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class FileUploadService {
   
-  baseApiUrl = environment.baseAPIUrl +'api/UploadPhotos';
+  baseApiUrl = environment.baseAPIUrl +'api/Employees';
 
   constructor(private http: HttpClient) {
 
@@ -20,6 +20,6 @@ export class FileUploadService {
     const formData = new FormData();    
     formData.append("file", file, file.name);
 
-    return this.http.post(`${this.baseApiUrl}/${employeeID}`, formData)
+    return this.http.post(`${this.baseApiUrl}/UploadPhoto/${employeeID}`, formData)
   }
 } 

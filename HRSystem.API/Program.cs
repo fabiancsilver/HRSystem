@@ -1,5 +1,6 @@
 using HRSystem.Persistence;
 using HRSystem.Persistence.HR;
+using HRSystem.Persistence.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,8 +34,11 @@ namespace HRSystem.API
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<HRContext>();
-                    DbInitializer.Initialize(context);
+                    var hrContext = services.GetRequiredService<HRContext>();
+
+                    var ifContext = services.GetRequiredService<InfrastructureContext>();
+
+                    DbInitializer.Initialize(hrContext, ifContext);
                 }
                 catch (Exception ex)
                 {

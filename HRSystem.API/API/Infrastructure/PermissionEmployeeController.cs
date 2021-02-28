@@ -1,5 +1,10 @@
-﻿using HRSystem.Domain.Infrastructure;
+﻿using HRSystem.Application.Contracts.Persistence.Infrastructure;
+using HRSystem.Application.Features.Notifications.Queries.GetNotifications;
+using HRSystem.Domain.Infrastructure;
 using HRSystem.Persistence.HR;
+using HRSystem.Persistence.Infrastructure;
+using HRSystem.Persistence.Repositories.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -16,13 +21,16 @@ namespace HRSystem.API.HR
     {
 
         private readonly ILogger<PermissionEmployeeController> _logger;
-        private readonly HRContext _hrContext;
+        //private readonly IPermissionEmployeeRepository _permissionEmployeeRepository;
+        private readonly IMediator _mediator;
 
         public PermissionEmployeeController(ILogger<PermissionEmployeeController> logger,
-                                            HRContext hrContext)
+                                            IMediator mediator)
         {
-            _logger = logger;
-            this._hrContext = hrContext;
+            _logger = logger;            
+            //IPermissionEmployeeRepository permissionEmployeeRepository
+            //_permissionEmployeeRepository = permissionEmployeeRepository;
+            _mediator = mediator;
         }
 
         // GET: api/<PermissionEmployeeController>/PermissionsByEmployee
@@ -31,13 +39,10 @@ namespace HRSystem.API.HR
         {
             try
             {
-                var report = await this._hrContext.PermissionEmployee
-                                                  .Include(x => x.Permission)
-                                                  .Include(x=> x.Employee)
-                                                  .Where(x => x.EmployeeID == employeeID)
-                                                  .ToListAsync();
+                var getPermissionEmployeesQuery = new GetPermissionEmployeesQuery() { EmployeeID = employeeID };
+                var response = await _mediator.Send(getPermissionEmployeesQuery);
 
-                return Ok(report);
+                return Ok(response);                
             }
             catch (Exception ex)
             {
@@ -52,12 +57,10 @@ namespace HRSystem.API.HR
         {
             try
             {
-                var report = await this._hrContext.PermissionEmployee
-                                                  .Include(x => x.Permission)
-                                                  .Include(x => x.Employee)
-                                                  .ToListAsync();
+                var getPermissionEmployeesQuery = new GetPermissionEmployeesQuery() { EmployeeID = 1 };
+                var response = await _mediator.Send(getPermissionEmployeesQuery);
 
-                return Ok(report);
+                return Ok(response);
             }
             catch (Exception ex)
             {

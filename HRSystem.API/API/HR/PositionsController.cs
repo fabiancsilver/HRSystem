@@ -1,9 +1,12 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Features.Positions.Commands.CreatePosition;
+using HRSystem.Application.Features.Positions.Commands.DeletePosition;
+using HRSystem.Application.Features.Positions.Commands.UpdatePosition;
+using HRSystem.Application.Features.Positions.Queries.GetPosition;
+using HRSystem.Application.Features.Positions.Queries.GetPositions;
 using HRSystem.Domain.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,105 +16,63 @@ namespace HRSystem.API.HR
     [ApiController]
     public class PositionsController : ControllerBase
     {
-        private readonly IPositionRepository _positionRepository;
-        private readonly ILogger<PositionsController> _logger;
+        private readonly IMediator _mediator;
 
-        public PositionsController(IPositionRepository positionRepository,
-                                ILogger<PositionsController> logger)
+        public PositionsController(IMediator mediator)
         {
-            _positionRepository = positionRepository;
-            _logger = logger;
+            _mediator = mediator;
         }
 
         // GET: api/<PositionsController>
         [HttpGet]
         public async Task<ActionResult<ICollection<Position>>> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            try
-            {
-                var positions = await _positionRepository.GetAll(queryParameters);
+            var getPositionsCommand = new GetPositionsQuery() { queryParameters = queryParameters };
+            var response = await _mediator.Send(getPositionsCommand);
 
-
-                return Ok(positions);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response);
         }
 
         // GET api/<PositionsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Position>> Get(int id)
         {
-            try
-            {
-                var position = await _positionRepository.GetById(id);
 
-                return Ok(position);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var getPositionCommand = new GetPositionQuery() { PositionID = id };
+            var response = await _mediator.Send(getPositionCommand);
+
+            return Ok(response);
 
         }
 
         // POST api/<PositionsController>
         [HttpPost]
-        public async Task<ActionResult<Position>> Post(Position position)
+        public async Task<ActionResult<Position>> Post(CreatePositionCommand createPositionCommand)
         {
-            try
-            {
-                _positionRepository.Create(position);
-                await _positionRepository.SaveChanges();
+            var response = await _mediator.Send(createPositionCommand);
 
-                return Ok(position);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Position);
         }
 
         // PUT api/<PositionsController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Position>> Put(int id, Position position)
+        public async Task<ActionResult<Position>> Put(int id, UpdatePositionCommand updatePositionCommand)
         {
-            try
-            {
-                _positionRepository.Update(id, position);
-                await _positionRepository.SaveChanges();
+            updatePositionCommand.PositionID = id;
+            var response = await _mediator.Send(updatePositionCommand);
 
-                return Ok(position);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Position);
         }
 
         // DELETE api/<PositionsController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _positionRepository.Remove(id);
-                await _positionRepository.SaveChanges();
+            var deletePositionCommand = new DeletePositionCommand() { PositionID = id };
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _mediator.Send(deletePositionCommand);
 
+            return Ok(response.Position);
         }
     }
 }

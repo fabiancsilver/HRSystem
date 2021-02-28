@@ -1,9 +1,12 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Features.Colors.Commands.CreateColor;
+using HRSystem.Application.Features.Colors.Commands.DeleteColor;
+using HRSystem.Application.Features.Colors.Commands.UpdateColor;
+using HRSystem.Application.Features.Colors.Queries.GetColor;
+using HRSystem.Application.Features.Colors.Queries.GetColors;
 using HRSystem.Domain.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,105 +16,63 @@ namespace HRSystem.API.HR
     [ApiController]
     public class ColorsController : ControllerBase
     {
-        private readonly IColorRepository _colorRepository;
-        private readonly ILogger<ColorsController> _logger;
+        private readonly IMediator _mediator;
 
-        public ColorsController(IColorRepository colorRepository,
-                                ILogger<ColorsController> logger)
+        public ColorsController(IMediator mediator)
         {
-            _colorRepository = colorRepository;
-            _logger = logger;
+            _mediator = mediator;
         }
 
         // GET: api/<ColorsController>
         [HttpGet]
         public async Task<ActionResult<ICollection<Color>>> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            try
-            {
-                var colors = await _colorRepository.GetAll(queryParameters);
+            var getColorsCommand = new GetColorsQuery() { queryParameters = queryParameters };
+            var response = await _mediator.Send(getColorsCommand);
 
-
-                return Ok(colors);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response);
         }
 
         // GET api/<ColorsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Color>> Get(int id)
         {
-            try
-            {
-                var color = await _colorRepository.GetById(id);
 
-                return Ok(color);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var getColorCommand = new GetColorQuery() { ColorID = id };
+            var response = await _mediator.Send(getColorCommand);
+
+            return Ok(response);
 
         }
 
         // POST api/<ColorsController>
         [HttpPost]
-        public async Task<ActionResult<Color>> Post(Color color)
+        public async Task<ActionResult<Color>> Post(CreateColorCommand createColorCommand)
         {
-            try
-            {
-                _colorRepository.Create(color);
-                await _colorRepository.SaveChanges();
+            var response = await _mediator.Send(createColorCommand);
 
-                return Ok(color);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Color);
         }
 
         // PUT api/<ColorsController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Color>> Put(int id, Color color)
+        public async Task<ActionResult<Color>> Put(int id, UpdateColorCommand updateColorCommand)
         {
-            try
-            {
-                _colorRepository.Update(id, color);
-                await _colorRepository.SaveChanges();
+            updateColorCommand.ColorID = id;
+            var response = await _mediator.Send(updateColorCommand);
 
-                return Ok(color);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Color);
         }
 
         // DELETE api/<ColorsController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _colorRepository.Remove(id);
-                await _colorRepository.SaveChanges();
+            var deleteColorCommand = new DeleteColorCommand() { ColorID = id };
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _mediator.Send(deleteColorCommand);
 
+            return Ok(response.Color);
         }
     }
 }

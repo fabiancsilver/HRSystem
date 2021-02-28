@@ -1,9 +1,12 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Features.Shifts.Commands.CreateShift;
+using HRSystem.Application.Features.Shifts.Commands.DeleteShift;
+using HRSystem.Application.Features.Shifts.Commands.UpdateShift;
+using HRSystem.Application.Features.Shifts.Queries.GetShift;
+using HRSystem.Application.Features.Shifts.Queries.GetShifts;
 using HRSystem.Domain.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,105 +16,63 @@ namespace HRSystem.API.HR
     [ApiController]
     public class ShiftsController : ControllerBase
     {
-        private readonly IShiftRepository _shiftRepository;
-        private readonly ILogger<ShiftsController> _logger;
+        private readonly IMediator _mediator;
 
-        public ShiftsController(IShiftRepository shiftRepository,
-                                ILogger<ShiftsController> logger)
+        public ShiftsController(IMediator mediator)
         {
-            _shiftRepository = shiftRepository;
-            _logger = logger;
+            _mediator = mediator;
         }
 
-        // GET: api/<ShiftsController>
+        // GET: api/<Shift>
         [HttpGet]
         public async Task<ActionResult<ICollection<Shift>>> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            try
-            {
-                var shifts = await _shiftRepository.GetAll(queryParameters);
+            var getShiftsCommand = new GetShiftsQuery() { queryParameters = queryParameters };
+            var response = await _mediator.Send(getShiftsCommand);
 
-
-                return Ok(shifts);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response);
         }
 
-        // GET api/<ShiftsController>/5
+        // GET api/<Shift>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Shift>> Get(int id)
         {
-            try
-            {
-                var shift = await _shiftRepository.GetById(id);
 
-                return Ok(shift);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var getShiftCommand = new GetShiftQuery() { ShiftID = id };
+            var response = await _mediator.Send(getShiftCommand);
+
+            return Ok(response);
 
         }
 
-        // POST api/<ShiftsController>
+        // POST api/<Shift>
         [HttpPost]
-        public async Task<ActionResult<Shift>> Post(Shift shift)
+        public async Task<ActionResult<Shift>> Post(CreateShiftCommand createShiftCommand)
         {
-            try
-            {
-                _shiftRepository.Create(shift);
-                await _shiftRepository.SaveChanges();
+            var response = await _mediator.Send(createShiftCommand);
 
-                return Ok(shift);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Shift);
         }
 
-        // PUT api/<ShiftsController>/5
+        // PUT api/<Shift>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Shift>> Put(int id, Shift shift)
+        public async Task<ActionResult<Shift>> Put(int id, UpdateShiftCommand updateShiftCommand)
         {
-            try
-            {
-                _shiftRepository.Update(id, shift);
-                await _shiftRepository.SaveChanges();
+            updateShiftCommand.ShiftID = id;
+            var response = await _mediator.Send(updateShiftCommand);
 
-                return Ok(shift);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.Shift);
         }
 
-        // DELETE api/<ShiftsController>/5
+        // DELETE api/<Shift>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _shiftRepository.Remove(id);
-                await _shiftRepository.SaveChanges();
+            var deleteShiftCommand = new DeleteShiftCommand() { ShiftID = id };
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _mediator.Send(deleteShiftCommand);
 
+            return Ok(response.Shift);
         }
     }
 }

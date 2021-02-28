@@ -1,5 +1,5 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Domain.HR;
 using HRSystem.Persistence.Common;
 using HRSystem.Persistence.HR;
@@ -11,12 +11,11 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class EmailRepository : BaseRepository<Email>, IEmailRepository
-    {
-
+    public class EmailRepository : HRRepository<Email>, IEmailRepository
+    {        
         public EmailRepository(HRContext context) : base(context)
         {
-            
+     
         } 
 
         public override async Task<IEnumerable<Email>> GetAll(QueryParameters queryParameters)
@@ -31,7 +30,7 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "EmailAddress", "EmailAddress" }
             };
 
-            var list = _dbContext.Emails
+            var list = _hrDbContext.Emails
                                .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
                                .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
                                .AsQueryable();
@@ -43,7 +42,7 @@ namespace HRSystem.Persistence.Repositories.HR
         public async Task<ICollection<Email>> GetAllByEmployee(int employeeID)
         {
 
-            var list = _dbContext.Emails.Where(x => x.EmployeeID == employeeID);
+            var list = _hrDbContext.Emails.Where(x => x.EmployeeID == employeeID);
 
             return await list.ToListAsync();
         }
@@ -51,7 +50,7 @@ namespace HRSystem.Persistence.Repositories.HR
 
         public async Task<Email> GetByEmployee(int employeeID)
         {
-            return await _dbContext.Emails.FirstOrDefaultAsync(x => x.EmployeeID == employeeID);
+            return await _hrDbContext.Emails.FirstOrDefaultAsync(x => x.EmployeeID == employeeID);
         }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using HRSystem.Domain.HR;
 using HRSystem.Domain.Infrastructure;
 using HRSystem.Persistence.HR;
+using HRSystem.Persistence.Infrastructure;
 using System.Linq;
 
 namespace HRSystem.Persistence
 {
     public static class DbInitializer
     {
-        public static void Initialize(HRContext context)
+        public static void Initialize(HRContext context, InfrastructureContext infrastructureContext)
         {
             context.Database.EnsureCreated();
 
@@ -139,7 +140,7 @@ namespace HRSystem.Persistence
                 context.SaveChanges();
             }
 
-            if (!context.Permissions.Any())
+            if (!infrastructureContext.Permissions.Any())
             {
                 var permissions = new Permission[]
                     {
@@ -153,13 +154,13 @@ namespace HRSystem.Persistence
 
                 foreach (Permission permission in permissions)
                 {
-                    context.Permissions.Add(permission);
+                    infrastructureContext.Permissions.Add(permission);
                 }
 
-                context.SaveChanges();
+                infrastructureContext.SaveChanges();
             }
 
-            if (!context.Notifications.Any())
+            if (!infrastructureContext.Notifications.Any())
             {
                 var notifications = new Notification[]
                     {
@@ -170,7 +171,7 @@ namespace HRSystem.Persistence
 
                 foreach (Notification notification in notifications)
                 {
-                    context.Notifications.Add(notification);
+                    infrastructureContext.Notifications.Add(notification);
                 }
 
                 context.SaveChanges();

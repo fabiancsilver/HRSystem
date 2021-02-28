@@ -1,5 +1,5 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Domain.HR;
 using HRSystem.Persistence.Common;
 using HRSystem.Persistence.HR;
@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class PositionRepository : BaseRepository<Position>, IPositionRepository
-    {        
-
+    public class PositionRepository : HRRepository<Position>, IPositionRepository
+    {
+        
         public PositionRepository(HRContext context) : base(context)
-        {            
+        {
         
         }       
 
@@ -31,7 +31,7 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "Name", "Name" }
             };
 
-            var list = _dbContext.Positions
+            var list = _hrDbContext.Positions
                                .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
                                .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
                                .AsQueryable();

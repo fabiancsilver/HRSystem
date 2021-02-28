@@ -1,11 +1,18 @@
 ﻿using HRSystem.Application.Common;
-
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Features.Employees.Commands.CreateEmployee;
+using HRSystem.Application.Features.Employees.Commands.DeleteEmployee;
+using HRSystem.Application.Features.Employees.Commands.UpdateEmployee;
+using HRSystem.Application.Features.Employees.Commands.UploadEmployeePhoto;
+using HRSystem.Application.Features.Employees.Queries.GetEmployee;
+using HRSystem.Application.Features.Employees.Queries.GetEmployees;
 using HRSystem.Domain.HR;
-using HRSystem.Persistence.Infrastructure;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
+using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace HRSystem.API.HR
@@ -14,101 +21,84 @@ namespace HRSystem.API.HR
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly IEmployeeRepository _employeeRepository;
-        private readonly ILogEmployeeRepository _logEmployeeRepository;
-        private readonly ILogger<EmployeesController> _logger;
-        private readonly NotificationService _notificationService;
+        private readonly IMediator _mediator;
+        private readonly IConfiguration _configuration;
 
-        public EmployeesController(IEmployeeRepository employeeRepository,
-                                   ILogEmployeeRepository logEmployeeRepository,
-                                   ILogger<EmployeesController> logger, 
-                                   NotificationService notificationService)
+
+        public EmployeesController(IMediator mediator,
+                                   IConfiguration configuration)
         {
-            _employeeRepository = employeeRepository;
-            _logEmployeeRepository = logEmployeeRepository;
-            _logger = logger;
-            _notificationService = notificationService;
+            _mediator = mediator;
+            _configuration = configuration;
         }
 
         // GET: api/<EmployeesController>
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
+        public async Task<ActionResult<ICollection<Employee>>> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            try
-            {
-                var employees = await _employeeRepository.GetAll(queryParameters);
-                _logger.LogInformation($"Returned all item from repository.");
+            var getEmployeesCommand = new GetEmployeesQuery() { queryParameters = queryParameters };
+            var response = await _mediator.Send(getEmployeesCommand);
 
-                return Ok(employees);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response);
         }
 
         // GET api/<EmployeesController>/5
         [HttpGet("{id}")]
-        public async Task<Employee> Get(int id)
+        public async Task<ActionResult<Employee>> Get(int id)
         {
-            return await _employeeRepository.GetById(id);
+
+            var getEmployeeCommand = new GetEmployeeQuery() { EmployeeID = id };
+            var response = await _mediator.Send(getEmployeeCommand);
+
+            return Ok(response);
+
         }
 
         // POST api/<EmployeesController>
         [HttpPost]
-        public async Task<IActionResult> Post(Employee employee)
+        public async Task<ActionResult<Employee>> Post(CreateEmployeeCommand createEmployeeCommand)
         {
-            _employeeRepository.Create(employee);            
+            var response = await _mediator.Send(createEmployeeCommand);
 
-            if (await _employeeRepository.SaveChanges() > 0)
-            {
-                await _logEmployeeRepository.Log(employee);
-                await _employeeRepository.SaveChanges();
-
-                //Send Notification
-                _notificationService.SendNotificaion("EMPLOYEE_ADDED");
-            }
-
-            return Ok(employee);
+            return Ok(response.Employee);
         }
 
         // PUT api/<EmployeesController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Employee employee)
+        public async Task<ActionResult<Employee>> Put(int id, UpdateEmployeeCommand updateEmployeeCommand)
         {
-            _employeeRepository.Update(id, employee);
+            updateEmployeeCommand.EmployeeID = id;
+            var response = await _mediator.Send(updateEmployeeCommand);
 
-            if (await _employeeRepository.SaveChanges() > 0)
-            {
-                await _logEmployeeRepository.Log(employee);
-                await _employeeRepository.SaveChanges();
-
-                //Send Notification
-                _notificationService.SendNotificaion("EMPLOYEE_MODIFIED");
-            }
-
-            return Ok();
+            return Ok(response.Employee);
         }
 
         // DELETE api/<EmployeesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var deleteEmployeeCommand = new DeleteEmployeeCommand() { EmployeeID = id };
 
-            var employee = await _employeeRepository.GetById(id);
+            var response = await _mediator.Send(deleteEmployeeCommand);
 
-            if (employee != null)
-            {
-                await _logEmployeeRepository.Log(employee);
-                await _employeeRepository.SaveChanges();
+            return Ok(response.Employee);
+        }
 
-                //Send Notification
-                _notificationService.SendNotificaion("EMPLOYEE_DELETED");
-            }
 
-            await _employeeRepository.Remove(id);
-            await _employeeRepository.SaveChanges();
+        // POST api/<UploadPhotosController>
+        [HttpPost("UploadPhoto/{employeeID}")]
+        public async Task<ActionResult> UploadPhoto(int employeeID, IFormFile file)
+        {
+            var uploadEmployeePhotoCommand = new UploadEmployeePhotoCommand();
+
+            uploadEmployeePhotoCommand.Stream = file.OpenReadStream();
+
+            var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            uploadEmployeePhotoCommand.FileExtension = Path.GetExtension(fileName);
+            uploadEmployeePhotoCommand.EmployeeID = employeeID;
+            uploadEmployeePhotoCommand.PathToSave = _configuration.GetSection("Resources:Photos").Value;
+
+            var response = await _mediator.Send(uploadEmployeePhotoCommand);
 
             return Ok();
         }

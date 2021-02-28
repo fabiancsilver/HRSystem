@@ -1,9 +1,13 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Features.EmailTypes.Commands.CreateEmailType;
+using HRSystem.Application.Features.EmailTypes.Commands.DeleteEmailType;
+using HRSystem.Application.Features.EmailTypes.Commands.UpdateEmailType;
+using HRSystem.Application.Features.EmailTypes.Queries.GetEmailType;
+using HRSystem.Application.Features.EmailTypes.Queries.GetEmailTypes;
+
 using HRSystem.Domain.HR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,105 +17,63 @@ namespace HRSystem.API.HR
     [ApiController]
     public class EmailTypesController : ControllerBase
     {
-        private readonly IEmailTypeRepository _emailTypeRepository;
-        private readonly ILogger<EmailTypesController> _logger;
+        private readonly IMediator _mediator;
 
-        public EmailTypesController(IEmailTypeRepository emailTypeRepository,
-                                ILogger<EmailTypesController> logger)
+        public EmailTypesController(IMediator mediator)
         {
-            _emailTypeRepository = emailTypeRepository;
-            _logger = logger;
+            _mediator = mediator;
         }
 
         // GET: api/<EmailTypesController>
         [HttpGet]
         public async Task<ActionResult<ICollection<EmailType>>> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            try
-            {
-                var emailTypes = await _emailTypeRepository.GetAll(queryParameters);
+            var getEmailTypesCommand = new GetEmailTypesQuery() { queryParameters = queryParameters };
+            var response = await _mediator.Send(getEmailTypesCommand);
 
-
-                return Ok(emailTypes);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response);
         }
 
         // GET api/<EmailTypesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<EmailType>> Get(int id)
         {
-            try
-            {
-                var emailType = await _emailTypeRepository.GetById(id);
 
-                return Ok(emailType);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var getEmailTypeCommand = new GetEmailTypeQuery() { EmailTypeID = id };
+            var response = await _mediator.Send(getEmailTypeCommand);
+
+            return Ok(response);
 
         }
 
         // POST api/<EmailTypesController>
         [HttpPost]
-        public async Task<ActionResult<EmailType>> Post(EmailType emailType)
+        public async Task<ActionResult<EmailType>> Post(CreateEmailTypeCommand createEmailTypeCommand)
         {
-            try
-            {
-                _emailTypeRepository.Create(emailType);
-                await _emailTypeRepository.SaveChanges();
+            var response = await _mediator.Send(createEmailTypeCommand);
 
-                return Ok(emailType);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.EmailType);
         }
 
         // PUT api/<EmailTypesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<EmailType>> Put(int id, EmailType emailType)
+        public async Task<ActionResult<EmailType>> Put(int id, UpdateEmailTypeCommand updateEmailTypeCommand)
         {
-            try
-            {
-                _emailTypeRepository.Update(id, emailType);
-                await _emailTypeRepository.SaveChanges();
+            updateEmailTypeCommand.EmailTypeID = id;
+            var response = await _mediator.Send(updateEmailTypeCommand);
 
-                return Ok(emailType);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(response.EmailType);
         }
 
         // DELETE api/<EmailTypesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _emailTypeRepository.Remove(id);
-                await _emailTypeRepository.SaveChanges();
+            var deleteEmailTypeCommand = new DeleteEmailTypeCommand() { EmailTypeID = id };
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _mediator.Send(deleteEmailTypeCommand);
 
+            return Ok(response.EmailType);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using HRSystem.Application.Common;
-using HRSystem.Application.Repositories;
+using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Domain.HR;
 using HRSystem.Persistence.Common;
 using HRSystem.Persistence.HR;
@@ -11,11 +11,12 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
-    public class EmailTypeRepository : BaseRepository<EmailType>, IEmailTypeRepository
+    public class EmailTypeRepository : HRRepository<EmailType>, IEmailTypeRepository
     {
+        
         public EmailTypeRepository(HRContext context) : base(context)
         {
-            
+        
         }
 
         public override async Task<IEnumerable<EmailType>> GetAll(QueryParameters queryParameters)
@@ -30,7 +31,7 @@ namespace HRSystem.Persistence.Repositories.HR
                 { "Name", "Name" }
             };
 
-            var list = _dbContext.EmailTypes
+            var list = _hrDbContext.EmailTypes
                                .ApplySort(queryParameters.SortBy, queryParameters.Direction, dictionarySort)
                                .ApplyFilter(queryParameters.FilterBy, dictionaryFilter)
                                .AsQueryable();
