@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using HRSystem.Application.Contracts.Persistence;
 using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Application.Features.Addresses.Commands.CreateAddress;
 using HRSystem.Application.Features.Addresses.Queries.GetByEmployee;

@@ -58,7 +58,6 @@ using HRSystem.Application.Features.Statuses.Queries.GetStatus;
 using HRSystem.Application.Features.Statuses.Queries.GetStatuses;
 using HRSystem.Domain.HR;
 using HRSystem.Domain.Infrastructure;
-using System.Collections.Generic;
 
 namespace HRSystem.Application.Profiles
 {
@@ -76,7 +75,7 @@ namespace HRSystem.Application.Profiles
             CreateMap<Shift, GetEmployeesShiftDto>().ReverseMap();
             CreateMap<Employee, GetEmployeesEmployeeDto>().ReverseMap();
             CreateMap<Color, GetEmployeesColorDto>().ReverseMap();
-            
+
             //CreateMap<ICollection<Employee>, ICollection<GetEmployeesVm>().ReverseMap();
 
 
@@ -97,13 +96,13 @@ namespace HRSystem.Application.Profiles
             CreateMap<AddressType, UpdateAddressTypeCommand>().ReverseMap();
             CreateMap<AddressType, DeleteAddressTypeDto>();
             CreateMap<AddressType, DeleteAddressTypeCommand>().ReverseMap();
-            
-            CreateMap<Address, GetAddressByEmployeeVm>().ReverseMap();            
+
+            CreateMap<Address, GetAddressByEmployeeVm>().ReverseMap();
             CreateMap<Address, CreateAddressDto>();
             CreateMap<Address, CreateAddressCommand>().ReverseMap();
             CreateMap<AddressType, AddressTypeDto>().ReverseMap();
             CreateMap<Address, UpdateAddressDto>();
-            CreateMap<Address, UpdateEmailCommand>().ReverseMap();           
+            CreateMap<Address, UpdateEmailCommand>().ReverseMap();
 
             CreateMap<Department, GetDepartmentQuery>().ReverseMap();
             CreateMap<Department, GetDepartmentVm>().ReverseMap();
@@ -129,7 +128,7 @@ namespace HRSystem.Application.Profiles
 
             CreateMap<Email, GetEmailsByEmployeeVm>().ReverseMap();
             CreateMap<Email, CreateEmailDto>();
-            CreateMap<Email, CreateEmailCommand>().ReverseMap();            
+            CreateMap<Email, CreateEmailCommand>().ReverseMap();
             CreateMap<Email, UpdateEmailDto>();
             CreateMap<Email, UpdateEmailCommand>().ReverseMap();
 

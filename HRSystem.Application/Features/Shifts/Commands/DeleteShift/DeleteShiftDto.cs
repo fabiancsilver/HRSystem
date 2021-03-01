@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Shifts.Commands.DeleteShift
+﻿namespace HRSystem.Application.Features.Shifts.Commands.DeleteShift
 {
     public class DeleteShiftDto
     {

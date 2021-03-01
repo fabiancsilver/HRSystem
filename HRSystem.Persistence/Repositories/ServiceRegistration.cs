@@ -1,4 +1,4 @@
-﻿using HRSystem.Application.Contracts.Persistence;
+﻿using HRSystem.Application.Contracts.Infrastructure;
 using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Application.Contracts.Persistence.Infrastructure;
 using HRSystem.Persistence.HR;
@@ -12,14 +12,14 @@ namespace HRSystem.Persistence.Repositories
 {
     public static class ServiceRegistration
     {
-        public static IServiceCollection AddPersistenceServices(this IServiceCollection services, 
+        public static IServiceCollection AddPersistenceServices(this IServiceCollection services,
                                                                 IConfiguration configuration)
         {
             services.AddDbContext<HRContext>(options =>
                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<InfrastructureContext>(options =>
-               options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));            
+               options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped(typeof(IHRAsyncRepository<>), typeof(HRRepository<>));
             services.AddScoped(typeof(IInfrastructureAsyncRepository<>), typeof(InfrastructureRepository<>));
@@ -42,6 +42,8 @@ namespace HRSystem.Persistence.Repositories
             services.AddScoped(typeof(INotificationEmployeeRepository), typeof(NotificationEmployeeRepository));
             services.AddScoped(typeof(IPermissionRepository), typeof(PermissionRepository));
             services.AddScoped(typeof(IPermissionEmployeeRepository), typeof(PermissionEmployeeRepository));
+
+            services.AddScoped(typeof(INotificationService), typeof(NotificationService));
 
             return services;
         }

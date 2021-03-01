@@ -1,20 +1,17 @@
-﻿using HRSystem.Application.Common;
-using HRSystem.Application.Contracts.Persistence.HR;
+﻿using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Domain.HR;
 using HRSystem.Persistence.HR;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories.HR
 {
     public class LogEmployeeRepository : HRRepository<LogEmployee>, ILogEmployeeRepository
     {
-                
+
         public LogEmployeeRepository(HRContext context) : base(context)
         {
-            
-        }          
+
+        }
 
         public async Task<int> Log(Employee employee)
         {
@@ -35,6 +32,6 @@ namespace HRSystem.Persistence.Repositories.HR
 
             _hrDbContext.LogEmployees.Add(logEmployee);
             return await _dbContext.SaveChangesAsync();
-        }        
+        }
     }
 }

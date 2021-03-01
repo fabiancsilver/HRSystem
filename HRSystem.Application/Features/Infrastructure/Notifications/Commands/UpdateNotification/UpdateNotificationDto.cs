@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Notifications.Commands.UpdateNotification
+﻿namespace HRSystem.Application.Features.Notifications.Commands.UpdateNotification
 {
     public class UpdateNotificationDto
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Positions.Commands.DeletePosition
+﻿namespace HRSystem.Application.Features.Positions.Commands.DeletePosition
 {
     public class DeletePositionDto
     {

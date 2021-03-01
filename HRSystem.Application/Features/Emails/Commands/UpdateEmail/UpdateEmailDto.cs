@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Emails.Commands.UpdateEmail
+﻿namespace HRSystem.Application.Features.Emails.Commands.UpdateEmail
 {
     public class UpdateEmailDto
     {

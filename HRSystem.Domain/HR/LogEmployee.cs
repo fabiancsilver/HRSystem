@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HRSystem.Domain.HR
 {
@@ -22,21 +21,21 @@ namespace HRSystem.Domain.HR
         public DateTime StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
-        
+
         public int PositionID { get; set; }
-        
+
         public int DepartmentID { get; set; }
-        
+
         public int StatusID { get; set; }
-        
+
         public int ShiftID { get; set; }
 
         public int? ManagerID { get; set; }
 
         public string TeamMemberPhoto { get; set; }
-        
+
         public int FavoriteColorID { get; set; }
-        
+
         public int? PreferredPhoneID { get; set; }
     }
 }

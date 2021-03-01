@@ -6,7 +6,7 @@ namespace HRSystem.Application.Features.Employees.Commands.UploadEmployeePhoto
     {
         public UploadEmployeePhotoCommandValidator()
         {
-          
+
         }
     }
 }

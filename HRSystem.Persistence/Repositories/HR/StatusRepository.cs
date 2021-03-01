@@ -14,7 +14,7 @@ namespace HRSystem.Persistence.Repositories.HR
     {
         public StatusRepository(HRContext hrDbContext) : base(hrDbContext)
         {
-            
+
         }
 
         public override async Task<IEnumerable<Status>> GetAll(QueryParameters queryParameters)
@@ -36,6 +36,6 @@ namespace HRSystem.Persistence.Repositories.HR
 
 
             return await list.ToListAsync();
-        }       
+        }
     }
 }

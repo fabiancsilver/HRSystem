@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using System;
 
 namespace HRSystem.Application.Features.Departments.Queries.GetDepartment
 {

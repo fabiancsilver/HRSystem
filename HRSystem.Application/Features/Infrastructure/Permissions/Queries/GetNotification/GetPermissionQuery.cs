@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using System;
 
 namespace HRSystem.Application.Features.Permissions.Queries.GetPermission
 {

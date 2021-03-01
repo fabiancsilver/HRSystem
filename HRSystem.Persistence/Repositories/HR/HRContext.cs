@@ -84,7 +84,7 @@ namespace HRSystem.Persistence.HR
                   eb.HasNoKey();
                   eb.ToView("RetentionRateView");
                   eb.Property(p => p.Rate).HasColumnType("decimal(12,2)");
-              });            
+              });
         }
 
         public DbSet<Employee> Employees { get; set; }
@@ -111,7 +111,7 @@ namespace HRSystem.Persistence.HR
 
         public DbSet<Shift> Shifts { get; set; }
 
-        public DbSet<Color> Colors { get; set; }    
+        public DbSet<Color> Colors { get; set; }
 
 
         public DbSet<RetentionRate> RetentionRate { get; set; }

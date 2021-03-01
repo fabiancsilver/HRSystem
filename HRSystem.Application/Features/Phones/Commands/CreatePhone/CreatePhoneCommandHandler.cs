@@ -19,7 +19,7 @@ namespace HRSystem.Application.Features.Phones.Commands.CreatePhone
             _phoneTypeRepository = phoneTypeRepository;
         }
 
-        public async Task<CreatePhoneCommandResponse> Handle(CreatePhoneCommand request, 
+        public async Task<CreatePhoneCommandResponse> Handle(CreatePhoneCommand request,
                                                                CancellationToken cancellationToken)
         {
             var response = new CreatePhoneCommandResponse();

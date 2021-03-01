@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.PhoneTypes.Commands.CreatePhoneType
+﻿namespace HRSystem.Application.Features.PhoneTypes.Commands.CreatePhoneType
 {
     public class CreatePhoneTypeDto
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Statuses.Commands.DeleteStatus
+﻿namespace HRSystem.Application.Features.Statuses.Commands.DeleteStatus
 {
     public class DeleteStatusDto
     {

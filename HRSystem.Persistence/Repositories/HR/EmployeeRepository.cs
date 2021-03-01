@@ -13,11 +13,11 @@ namespace HRSystem.Persistence.Repositories.HR
 {
     public class EmployeeRepository : HRRepository<Employee>, IEmployeeRepository
     {
-        
+
         public EmployeeRepository(HRContext context) : base(context)
         {
-        
-        }       
+
+        }
 
         public override async Task<IEnumerable<Employee>> GetAll(QueryParameters queryParameters)
         {
@@ -57,7 +57,7 @@ namespace HRSystem.Persistence.Repositories.HR
                                  .ToListAsync();
         }
 
-        
+
 
         public async Task UpdatePhoto(int employeeID, string pathPhoto)
         {
@@ -69,7 +69,7 @@ namespace HRSystem.Persistence.Repositories.HR
                 throw new ArgumentException();
             }
 
-            employee.TeamMemberPhoto = pathPhoto;            
+            employee.TeamMemberPhoto = pathPhoto;
         }
     }
 }

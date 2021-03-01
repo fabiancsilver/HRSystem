@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Permissions.Commands.CreatePermission
+﻿namespace HRSystem.Application.Features.Permissions.Commands.CreatePermission
 {
     public class CreatePermissionDto
     {

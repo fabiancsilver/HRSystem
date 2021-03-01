@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Positions.Queries.GetPosition
+﻿namespace HRSystem.Application.Features.Positions.Queries.GetPosition
 {
     public class GetPositionVm
     {

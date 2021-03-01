@@ -13,13 +13,13 @@ namespace HRSystem.Persistence.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("Infrastructure");            
+            modelBuilder.HasDefaultSchema("Infrastructure");
 
             modelBuilder.Entity<Permission>().ToTable("Permissions");
 
             modelBuilder.Entity<PermissionEmployee>().ToTable("PermissionEmployee");
             modelBuilder.Entity<PermissionEmployee>()
-                        .HasKey(s => new { s.PermissionID,s.EmployeeID });
+                        .HasKey(s => new { s.PermissionID, s.EmployeeID });
 
 
             modelBuilder.Entity<Notification>().ToTable("Notifications");
@@ -29,9 +29,9 @@ namespace HRSystem.Persistence.Infrastructure
                         .HasKey(s => new { s.NotificationID, s.EmployeeID });
 
 
-            modelBuilder.Entity<Employee>().ToTable("Employees","HR");
+            modelBuilder.Entity<Employee>().ToTable("Employees", "HR");
 
-        }        
+        }
 
         public DbSet<Permission> Permissions { get; set; }
 

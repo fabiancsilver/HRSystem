@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Shifts.Commands.CreateShift
+﻿namespace HRSystem.Application.Features.Shifts.Commands.CreateShift
 {
     public class CreateShiftDto
     {

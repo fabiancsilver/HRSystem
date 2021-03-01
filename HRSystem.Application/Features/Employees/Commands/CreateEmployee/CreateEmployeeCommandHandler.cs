@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using HRSystem.Application.Contracts.Infrastructure;
 using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Domain.HR;
 using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,12 +13,16 @@ namespace HRSystem.Application.Features.Employees.Commands.CreateEmployee
     public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeCommand, CreateEmployeeCommandResponse>
     {
         private readonly IHRAsyncRepository<Employee> _employeeRepository;
+        private readonly INotificationService _notificationService;
         private readonly IMapper _mapper;
 
-        public CreateEmployeeCommandHandler(IMapper mapper, IHRAsyncRepository<Employee> employeeRepository)
+        public CreateEmployeeCommandHandler(IMapper mapper,     
+                                            IHRAsyncRepository<Employee> employeeRepository,
+                                            INotificationService notificationService)
         {
             _mapper = mapper;
             _employeeRepository = employeeRepository;
+            _notificationService = notificationService;
         }
 
         public async Task<CreateEmployeeCommandResponse> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
@@ -43,9 +49,16 @@ namespace HRSystem.Application.Features.Employees.Commands.CreateEmployee
                 await _employeeRepository.SaveChanges();
 
                 response.Employee = _mapper.Map<CreateEmployeeDto>(employee);
-                //_notificationService.SendNotificaion("EMPLOYEE_MODIFIED");
-            }
 
+                try
+                {
+                    _notificationService.SendNotificaion("EMPLOYEE_ADDED");
+                }
+                catch (Exception) 
+                { 
+                    //Log error
+                }                
+            }
             return response;
         }
     }

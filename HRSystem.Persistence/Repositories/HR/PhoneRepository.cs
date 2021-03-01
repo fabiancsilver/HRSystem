@@ -4,7 +4,6 @@ using HRSystem.Domain.HR;
 using HRSystem.Persistence.Common;
 using HRSystem.Persistence.HR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,12 +12,12 @@ namespace HRSystem.Persistence.Repositories.HR
 {
     public class PhoneRepository : HRRepository<Phone>, IPhoneRepository
     {
-       
+
         public PhoneRepository(HRContext context) : base(context)
         {
-       
+
         }
-        
+
         public override async Task<IEnumerable<Phone>> GetAll(QueryParameters queryParameters)
         {
 
@@ -46,7 +45,7 @@ namespace HRSystem.Persistence.Repositories.HR
             var list = _hrDbContext.Phones.Where(x => x.EmployeeID == employeeID);
 
             return await list.ToListAsync();
-        }      
+        }
 
         public async Task<Phone> GetByEmployee(int employeeID)
         {

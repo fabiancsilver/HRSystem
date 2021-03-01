@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Departments.Commands.DeleteDepartment
+﻿namespace HRSystem.Application.Features.Departments.Commands.DeleteDepartment
 {
     public class DeleteDepartmentDto
     {

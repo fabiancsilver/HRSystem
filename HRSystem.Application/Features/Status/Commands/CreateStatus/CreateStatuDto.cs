@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Statuses.Commands.CreateStatus
+﻿namespace HRSystem.Application.Features.Statuses.Commands.CreateStatus
 {
     public class CreateStatusDto
     {

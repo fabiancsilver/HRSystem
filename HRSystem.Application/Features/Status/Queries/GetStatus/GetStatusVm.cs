@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Statuses.Queries.GetStatus
+﻿namespace HRSystem.Application.Features.Statuses.Queries.GetStatus
 {
     public class GetStatusVm
     {

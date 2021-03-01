@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Colors.Commands.DeleteColor
+﻿namespace HRSystem.Application.Features.Colors.Commands.DeleteColor
 {
     public class DeleteColorDto
     {

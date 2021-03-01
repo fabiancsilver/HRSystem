@@ -11,14 +11,14 @@ namespace HRSystem.Application.Features.Phones.Queries.GetPhoneByEmployee
     public class GetPhonesByEmployeeQueryHandler : IRequestHandler<GetPhonesByEmployeeQuery, GetPhonesByEmployeeQueryResponse>
     {
         private readonly IPhoneRepository _phoneRepository;
-        
+
         private readonly IMapper _mapper;
 
-        public GetPhonesByEmployeeQueryHandler(IMapper mapper, 
+        public GetPhonesByEmployeeQueryHandler(IMapper mapper,
                                             IPhoneRepository phoneRepository)
         {
             _mapper = mapper;
-            _phoneRepository = phoneRepository;            
+            _phoneRepository = phoneRepository;
         }
 
         public async Task<GetPhonesByEmployeeQueryResponse> Handle(GetPhonesByEmployeeQuery request, CancellationToken cancellationToken)
@@ -27,11 +27,12 @@ namespace HRSystem.Application.Features.Phones.Queries.GetPhoneByEmployee
             var phones = await _phoneRepository.GetAllByEmployee(request.EmployeeID);
             var phoneVm = _mapper.Map<ICollection<GetPhonesByEmployeeVm>>(phones);
 
-            if (phones == null) {
+            if (phones == null)
+            {
                 response.Success = false;
                 response.Phones = null;
                 return response;
-            }          
+            }
 
             response.Phones = phoneVm;
             return response;

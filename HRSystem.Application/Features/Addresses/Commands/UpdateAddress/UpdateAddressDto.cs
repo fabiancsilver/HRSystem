@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Addresses.Commands.UpdateAddress
+﻿namespace HRSystem.Application.Features.Addresses.Commands.UpdateAddress
 {
     public class UpdateAddressDto
     {

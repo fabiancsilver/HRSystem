@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.AddressTypes.Commands.UpdateAddressType
+﻿namespace HRSystem.Application.Features.AddressTypes.Commands.UpdateAddressType
 {
     public class UpdateAddressTypeDto
     {

@@ -4,8 +4,6 @@ using HRSystem.Application.Features.Notifications.Commands.DeleteNotification;
 using HRSystem.Application.Features.Notifications.Commands.UpdateNotification;
 using HRSystem.Application.Features.Notifications.Queries.GetNotification;
 using HRSystem.Application.Features.Notifications.Queries.GetNotifications;
-
-using HRSystem.Domain.HR;
 using HRSystem.Domain.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

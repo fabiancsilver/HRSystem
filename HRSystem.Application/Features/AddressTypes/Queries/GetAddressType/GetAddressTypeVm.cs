@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.AddressTypes.Queries.GetAddressType
+﻿namespace HRSystem.Application.Features.AddressTypes.Queries.GetAddressType
 {
     public class GetAddressTypeVm
     {

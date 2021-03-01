@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using HRSystem.Application.Contracts.Persistence.HR;
-using HRSystem.Domain.HR;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

@@ -5,11 +5,11 @@ using HRSystem.Persistence.Infrastructure;
 namespace HRSystem.Persistence.Repositories.HR
 {
     public class PermissionRepository : InfrastructureRepository<Permission>, IPermissionRepository
-    {        
+    {
 
-        public PermissionRepository(InfrastructureContext context)  : base(context)
+        public PermissionRepository(InfrastructureContext context) : base(context)
         {
-            
+
         }
     }
 }

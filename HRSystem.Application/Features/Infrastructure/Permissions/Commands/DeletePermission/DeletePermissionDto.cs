@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Permissions.Commands.DeletePermission
+﻿namespace HRSystem.Application.Features.Permissions.Commands.DeletePermission
 {
     public class DeletePermissionDto
     {

@@ -19,7 +19,7 @@ namespace HRSystem.Application.Features.Addresses.Commands.CreateAddress
             _addressTypeRepository = addressTypeRepository;
         }
 
-        public async Task<CreateAddressCommandResponse> Handle(CreateAddressCommand request, 
+        public async Task<CreateAddressCommandResponse> Handle(CreateAddressCommand request,
                                                                CancellationToken cancellationToken)
         {
             var response = new CreateAddressCommandResponse();

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.PhoneTypes.Queries.GetPhoneType
+﻿namespace HRSystem.Application.Features.PhoneTypes.Queries.GetPhoneType
 {
     public class GetPhoneTypeVm
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.EmailTypes.Queries.GetEmailType
+﻿namespace HRSystem.Application.Features.EmailTypes.Queries.GetEmailType
 {
     public class GetEmailTypeVm
     {

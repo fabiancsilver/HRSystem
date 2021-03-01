@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using HRSystem.Application.Contracts.Persistence.Infrastructure;
-using HRSystem.Domain.HR;
 using HRSystem.Domain.Infrastructure;
 using MediatR;
 using System.Collections.Generic;

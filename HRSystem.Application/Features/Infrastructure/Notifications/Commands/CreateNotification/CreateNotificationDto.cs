@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Notifications.Commands.CreateNotification
+﻿namespace HRSystem.Application.Features.Notifications.Commands.CreateNotification
 {
     public class CreateNotificationDto
     {

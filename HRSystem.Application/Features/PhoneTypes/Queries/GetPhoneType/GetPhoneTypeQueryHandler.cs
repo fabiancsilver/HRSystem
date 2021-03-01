@@ -10,19 +10,19 @@ namespace HRSystem.Application.Features.PhoneTypes.Queries.GetPhoneType
     public class GetPhoneTypeQueryHandler : IRequestHandler<GetPhoneTypeQuery, GetPhoneTypeVm>
     {
         private readonly IHRAsyncRepository<PhoneType> _phoneTypeRepository;
-        
+
         private readonly IMapper _mapper;
 
         public GetPhoneTypeQueryHandler(IMapper mapper, IHRAsyncRepository<PhoneType> phoneTypeRepository)
         {
             _mapper = mapper;
-            _phoneTypeRepository = phoneTypeRepository;            
+            _phoneTypeRepository = phoneTypeRepository;
         }
 
         public async Task<GetPhoneTypeVm> Handle(GetPhoneTypeQuery request, CancellationToken cancellationToken)
         {
             var phoneType = await _phoneTypeRepository.GetById(request.PhoneTypeID);
-            var phoneTypeVm = _mapper.Map<GetPhoneTypeVm>(phoneType);            
+            var phoneTypeVm = _mapper.Map<GetPhoneTypeVm>(phoneType);
 
             return phoneTypeVm;
         }

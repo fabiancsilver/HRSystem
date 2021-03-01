@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Statuses.Commands.UpdateStatus
+﻿namespace HRSystem.Application.Features.Statuses.Commands.UpdateStatus
 {
     public class UpdateStatusDto
     {

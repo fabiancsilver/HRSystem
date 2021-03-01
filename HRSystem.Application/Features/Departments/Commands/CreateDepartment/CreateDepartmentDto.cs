@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Departments.Commands.CreateDepartment
+﻿namespace HRSystem.Application.Features.Departments.Commands.CreateDepartment
 {
     public class CreateDepartmentDto
     {

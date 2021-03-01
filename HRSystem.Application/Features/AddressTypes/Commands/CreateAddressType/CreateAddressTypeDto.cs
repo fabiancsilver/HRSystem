@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.AddressTypes.Commands.CreateAddressType
+﻿namespace HRSystem.Application.Features.AddressTypes.Commands.CreateAddressType
 {
     public class CreateAddressTypeDto
     {

@@ -14,8 +14,8 @@ namespace HRSystem.Application.Features.Emails.Queries.GetEmailByEmployee
         private readonly IEmailTypeRepository _emailTypeRepository;
         private readonly IMapper _mapper;
 
-        public GetEmailsByEmployeeQueryHandler(IMapper mapper, 
-                                            IEmailRepository emailRepository, 
+        public GetEmailsByEmployeeQueryHandler(IMapper mapper,
+                                            IEmailRepository emailRepository,
                                             IEmailTypeRepository emailTypeRepository)
         {
             _mapper = mapper;
@@ -29,11 +29,12 @@ namespace HRSystem.Application.Features.Emails.Queries.GetEmailByEmployee
             var emails = await _emailRepository.GetAllByEmployee(request.EmployeeID);
             var emailVm = _mapper.Map<ICollection<GetEmailsByEmployeeVm>>(emails);
 
-            if (emails == null) {
+            if (emails == null)
+            {
                 response.Success = false;
                 response.Emails = null;
                 return response;
-            }          
+            }
 
             response.Emails = emailVm;
             return response;

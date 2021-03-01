@@ -30,8 +30,8 @@ namespace HRSystem.Persistence
             if (!context.Positions.Any())
             {
                 var positions = new Position[]
-                    {                        
-                        new Position{Name = "Manager"},                     
+                    {
+                        new Position{Name = "Manager"},
                         new Position{Name = "Agent"},
                     };
 

@@ -18,6 +18,6 @@ namespace HRSystem.Application.Features.Addresses.Commands.UpdateAddress
 
         public string Country { get; set; }
 
-        public string ZipCode { get; set; }        
+        public string ZipCode { get; set; }
     }
 }

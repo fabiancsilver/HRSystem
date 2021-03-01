@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Shifts.Queries.GetShifts
+﻿namespace HRSystem.Application.Features.Shifts.Queries.GetShifts
 {
     public class GetShiftsVm
     {

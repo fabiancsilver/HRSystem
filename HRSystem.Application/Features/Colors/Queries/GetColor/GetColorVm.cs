@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Colors.Queries.GetColor
+﻿namespace HRSystem.Application.Features.Colors.Queries.GetColor
 {
     public class GetColorVm
     {

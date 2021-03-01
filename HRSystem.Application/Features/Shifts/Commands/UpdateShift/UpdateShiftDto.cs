@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Shifts.Commands.UpdateShift
+﻿namespace HRSystem.Application.Features.Shifts.Commands.UpdateShift
 {
     public class UpdateShiftDto
     {

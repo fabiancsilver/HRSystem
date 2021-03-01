@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Colors.Commands.UpdateColor
+﻿namespace HRSystem.Application.Features.Colors.Commands.UpdateColor
 {
     public class UpdateColorDto
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.EmailTypes.Commands.UpdateEmailType
+﻿namespace HRSystem.Application.Features.EmailTypes.Commands.UpdateEmailType
 {
     public class UpdateEmailTypeDto
     {

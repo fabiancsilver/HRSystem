@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.PhoneTypes.Commands.UpdatePhoneType
+﻿namespace HRSystem.Application.Features.PhoneTypes.Commands.UpdatePhoneType
 {
     public class UpdatePhoneTypeDto
     {

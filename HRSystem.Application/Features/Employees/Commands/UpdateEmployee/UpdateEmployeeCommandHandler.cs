@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using HRSystem.Application.Contracts.Infrastructure;
 using HRSystem.Application.Contracts.Persistence.HR;
 using HRSystem.Domain.HR;
 using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,11 +14,15 @@ namespace HRSystem.Application.Features.Employees.Commands.UpdateEmployee
     {
         private readonly IHRAsyncRepository<Employee> _employeeRepository;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
-        public UpdateEmployeeCommandHandler(IMapper mapper, IHRAsyncRepository<Employee> employeeRepository)
+        public UpdateEmployeeCommandHandler(IMapper mapper, 
+                                            IHRAsyncRepository<Employee> employeeRepository,
+                                            INotificationService notificationService)
         {
             _mapper = mapper;
             _employeeRepository = employeeRepository;
+            _notificationService = notificationService;
         }
 
         public async Task<UpdateEmployeeCommandResponse> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
@@ -43,7 +49,14 @@ namespace HRSystem.Application.Features.Employees.Commands.UpdateEmployee
                 await _employeeRepository.SaveChanges();
 
                 response.Employee = _mapper.Map<UpdateEmployeeDto>(employee);
-                //_notificationService.SendNotificaion("EMPLOYEE_MODIFIED");
+                try
+                {
+                    _notificationService.SendNotificaion("EMPLOYEE_UPDATED");
+                }
+                catch (Exception)
+                {
+                    //Log error
+                }
             }
 
             return response;

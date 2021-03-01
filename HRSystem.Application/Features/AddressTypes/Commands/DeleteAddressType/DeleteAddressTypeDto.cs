@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.AddressTypes.Commands.DeleteAddressType
+﻿namespace HRSystem.Application.Features.AddressTypes.Commands.DeleteAddressType
 {
     public class DeleteAddressTypeDto
     {

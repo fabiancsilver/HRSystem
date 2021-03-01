@@ -33,7 +33,8 @@ export class UploadPhotoComponent implements OnInit {
     this.fileUploadService.upload(this.employeeID, this.file)
       .pipe(
         tap((result) => {
-          this.teamMemberPhoto = result.fileSystemNameWithExtenstion;
+          console.log('Photo :' + result.FileSystemNameWithExtenstion);
+          this.teamMemberPhoto = result.FileSystemNameWithExtenstion;
         }))
       .subscribe();
   }

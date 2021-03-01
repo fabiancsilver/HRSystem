@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Departments.Commands.UpdateDepartment
+﻿namespace HRSystem.Application.Features.Departments.Commands.UpdateDepartment
 {
     public class UpdateDepartmentDto
     {

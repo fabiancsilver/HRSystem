@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Permissions.Commands.UpdatePermission
+﻿namespace HRSystem.Application.Features.Permissions.Commands.UpdatePermission
 {
     public class UpdatePermissionDto
     {

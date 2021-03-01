@@ -19,7 +19,7 @@ namespace HRSystem.Application.Features.Emails.Commands.CreateEmail
             _emailTypeRepository = emailTypeRepository;
         }
 
-        public async Task<CreateEmailCommandResponse> Handle(CreateEmailCommand request, 
+        public async Task<CreateEmailCommandResponse> Handle(CreateEmailCommand request,
                                                                CancellationToken cancellationToken)
         {
             var response = new CreateEmailCommandResponse();

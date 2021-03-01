@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Notifications.Queries.GetNotification
+﻿namespace HRSystem.Application.Features.Notifications.Queries.GetNotification
 {
     public class GetNotificationVm
     {

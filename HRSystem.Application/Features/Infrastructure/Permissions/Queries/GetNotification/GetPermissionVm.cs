@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Permissions.Queries.GetPermission
+﻿namespace HRSystem.Application.Features.Permissions.Queries.GetPermission
 {
     public class GetPermissionVm
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Positions.Commands.CreatePosition
+﻿namespace HRSystem.Application.Features.Positions.Commands.CreatePosition
 {
     public class CreatePositionDto
     {

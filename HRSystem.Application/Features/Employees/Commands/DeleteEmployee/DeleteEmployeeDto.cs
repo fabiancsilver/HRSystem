@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Employees.Commands.DeleteEmployee
+﻿namespace HRSystem.Application.Features.Employees.Commands.DeleteEmployee
 {
     public class DeleteEmployeeDto
     {

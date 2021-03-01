@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Departments.Queries.GetDepartment
+﻿namespace HRSystem.Application.Features.Departments.Queries.GetDepartment
 {
     public class GetDepartmentVm
     {

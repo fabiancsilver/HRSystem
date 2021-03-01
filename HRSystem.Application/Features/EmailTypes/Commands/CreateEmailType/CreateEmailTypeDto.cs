@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.EmailTypes.Commands.CreateEmailType
+﻿namespace HRSystem.Application.Features.EmailTypes.Commands.CreateEmailType
 {
     public class CreateEmailTypeDto
     {

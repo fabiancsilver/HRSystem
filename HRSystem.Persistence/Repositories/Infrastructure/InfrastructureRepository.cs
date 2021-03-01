@@ -1,11 +1,5 @@
-﻿using HRSystem.Application.Common;
-using HRSystem.Application.Contracts.Persistence.Infrastructure;
+﻿using HRSystem.Application.Contracts.Persistence.Infrastructure;
 using HRSystem.Persistence.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HRSystem.Persistence.Repositories
 {
@@ -17,6 +11,6 @@ namespace HRSystem.Persistence.Repositories
         public InfrastructureRepository(InfrastructureContext infrastructureDbContext) : base(infrastructureDbContext)
         {
             _infrastructureDbContext = infrastructureDbContext;
-        }        
+        }
     }
 }

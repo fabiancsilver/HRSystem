@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Positions.Commands.UpdatePosition
+﻿namespace HRSystem.Application.Features.Positions.Commands.UpdatePosition
 {
     public class UpdatePositionDto
     {

@@ -96,11 +96,12 @@ namespace HRSystem.API.HR
             var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             uploadEmployeePhotoCommand.FileExtension = Path.GetExtension(fileName);
             uploadEmployeePhotoCommand.EmployeeID = employeeID;
-            uploadEmployeePhotoCommand.PathToSave = _configuration.GetSection("Resources:Photos").Value;
+            uploadEmployeePhotoCommand.PathToSave = Path.Combine(_configuration.GetSection("Paths:ResourcesFolder").Value ,
+                                                                 _configuration.GetSection("Paths:PhotosFolder").Value);
 
             var response = await _mediator.Send(uploadEmployeePhotoCommand);
 
-            return Ok();
+            return Ok(new { response.FileSystemNameWithExtenstion });
         }
     }
 }

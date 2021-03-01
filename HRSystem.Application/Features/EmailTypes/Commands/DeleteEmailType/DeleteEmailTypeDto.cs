@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.EmailTypes.Commands.DeleteEmailType
+﻿namespace HRSystem.Application.Features.EmailTypes.Commands.DeleteEmailType
 {
     public class DeleteEmailTypeDto
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Notifications.Commands.DeleteNotification
+﻿namespace HRSystem.Application.Features.Notifications.Commands.DeleteNotification
 {
     public class DeleteNotificationDto
     {

@@ -1,16 +1,10 @@
-﻿using HRSystem.Application.Contracts.Persistence.Infrastructure;
-using HRSystem.Application.Features.Notifications.Queries.GetNotifications;
+﻿using HRSystem.Application.Features.Notifications.Queries.GetNotifications;
 using HRSystem.Domain.Infrastructure;
-using HRSystem.Persistence.HR;
-using HRSystem.Persistence.Infrastructure;
-using HRSystem.Persistence.Repositories.HR;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace HRSystem.API.HR
@@ -27,7 +21,7 @@ namespace HRSystem.API.HR
         public PermissionEmployeeController(ILogger<PermissionEmployeeController> logger,
                                             IMediator mediator)
         {
-            _logger = logger;            
+            _logger = logger;
             //IPermissionEmployeeRepository permissionEmployeeRepository
             //_permissionEmployeeRepository = permissionEmployeeRepository;
             _mediator = mediator;
@@ -42,7 +36,7 @@ namespace HRSystem.API.HR
                 var getPermissionEmployeesQuery = new GetPermissionEmployeesQuery() { EmployeeID = employeeID };
                 var response = await _mediator.Send(getPermissionEmployeesQuery);
 
-                return Ok(response);                
+                return Ok(response);
             }
             catch (Exception ex)
             {

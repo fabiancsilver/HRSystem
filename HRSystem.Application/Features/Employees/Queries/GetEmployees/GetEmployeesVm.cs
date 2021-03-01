@@ -4,7 +4,7 @@ namespace HRSystem.Application.Features.Employees.Queries.GetEmployees
 {
     public class GetEmployeesVm
     {
-     
+
         public int EmployeeID { get; set; }
 
         public string Name { get; set; }
@@ -37,7 +37,7 @@ namespace HRSystem.Application.Features.Employees.Queries.GetEmployees
 
         public GetEmployeesShiftDto Shift { get; set; }
 
-        
+
         public GetEmployeesEmployeeDto Manager { get; set; }
 
         public GetEmployeesColorDto FavoriteColor { get; set; }

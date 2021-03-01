@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRSystem.Application.Features.Colors.Commands.CreateColor
+﻿namespace HRSystem.Application.Features.Colors.Commands.CreateColor
 {
     public class CreateColorDto
     {

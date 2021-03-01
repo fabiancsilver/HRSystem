@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using HRSystem.Application.Common;
 using HRSystem.Application.Contracts.Persistence.HR;
-using HRSystem.Application.Features.Shifts.Queries.GetShift;
 using HRSystem.Domain.HR;
 using MediatR;
 using System.Collections.Generic;
